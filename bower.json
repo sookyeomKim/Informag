@@ -1,0 +1,21 @@
+{
+  "name": "dev.infomag.co.kr",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-datepicker": "^1.6.4",
+    "jquery": "^3.1.1",
+    "bootstrap": "^3.3.7",
+    "bootstrap-fileinput": "^4.3.5",
+    "moment": "^2.15.2"
+  }
+}
