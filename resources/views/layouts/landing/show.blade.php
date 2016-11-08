@@ -92,17 +92,15 @@
         }
 
         function db_reg_ajax() {
-            var dbArry = [];
+            var dbObj = {};
             var formData = {};
             $(".db-input").each(function (index) {
-                var dbObj = {};
-                dbObj["'" + $(this).attr('data-db-title') + "'"] = $(this).val();
-                dbArry[index] = dbObj;
+                dbObj[$(this).attr('data-db-title')] = $(this).val();
             });
 
             formData = {
                 lan_id:{{$url_info->lan_id}},
-                db_content: dbArry,
+                db_content: dbObj,
                 db_inflow:'{{$url_info->lan_url}}'
             };
 

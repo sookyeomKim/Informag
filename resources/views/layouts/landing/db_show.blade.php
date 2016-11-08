@@ -1,4 +1,7 @@
 @extends('layouts.marster')
+@section('styles')
+    <link rel="stylesheet" href="{{elixir('css/db-show.css')}}">
+@endsection
 @section('content')
     <aside class="col-md-2">
         <dl>
@@ -48,7 +51,7 @@
                     <tr>
                         <th>등록일</th>
                         <th>URL</th>
-                        <th>제목</th>
+                        <th>조회수</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -64,8 +67,36 @@
             </div>
         </section>
         <section class="well">
-            검색
+            <form class="form-horizontal" method="get" action="{{route('DbManageField.show',$lan_info->id)}}">
+                <div class="form-group">
+                    <div class="input-daterange">
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" id="db-start-date" name="db_start_date" readonly=""
+                                   value="{{date("Y-m-d")}}">
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" id="db-end-date" name="db_end_date" readonly=""
+                                   value="{{date("Y-m-d",mktime(0,0,0,date("m")+6,date("d"),date("Y")))}}">
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <select class="form-control" id="db-title-select" name="db_title_select">
+                            @foreach($db_info as $info)
+                                <option value="{{$info->lan_db_title}}">{{$info->lan_db_title}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" id="db-search-text" name="db_search_text"
+                               value="">
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-default">검색</button>
+                    </div>
+                </div>
+            </form>
         </section>
+        {{--{{$test}}--}}
         <section class="well">
             <h2>DB리스트</h2>
             <div class="table-responsive">
@@ -83,9 +114,7 @@
                     @foreach($db_list as $item)
                         <tr>
                             @foreach($item->db_content as $value)
-                                @foreach($value as $val)
-                                    <td>{{$val}}</td>
-                                @endforeach
+                                <td>{{$value}}</td>
                             @endforeach
                             <td>{{$item->created_at}}</td>
                             <td>{{$item->db_inflow}}</td>
@@ -102,4 +131,26 @@
     </div>
 @endsection
 @section('scripts')
+    <script src="{{elixir('js/db-show.js')}}"></script>
+    <script>
+        $('.input-daterange').datepicker({
+            todayBtn: "linked",
+            language: "ko",
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        });
+    </script>
+@endsection
 
+{{--
+@foreach($db_list as $item)
+    <tr>
+        @foreach($item->db_content as $value)
+            @foreach($value as $val)
+                <td>{{$val}}</td>
+            @endforeach
+        @endforeach
+        <td>{{$item->created_at}}</td>
+        <td>{{$item->db_inflow}}</td>
+    </tr>
+@endforeach--}}

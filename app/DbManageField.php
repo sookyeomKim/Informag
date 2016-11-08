@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DbManageField extends Model
 {
     protected $casts = [
-        'db_content' => 'array',
+        'db_content' => 'json',
     ];
 
     protected $fillable = ['db_content', 'db_inflow', 'lan_id'];
