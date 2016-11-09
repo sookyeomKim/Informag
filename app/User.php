@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'c_name', 'm_name', 'm_email', 'c_id', 'password', 'role', 'phone'
+        'c_name', 'm_name', 'm_email', 'c_id', 'phone', 'password'
     ];
 
     /**
@@ -37,7 +37,8 @@ class User extends Authenticatable
         'm_name' => 'required|max:60',
         'm_email' => 'required|max:60|email',
         'c_id' => 'required|max:60|unique:users',
-        'phone' => ['required', 'regex:/^(010|011|016|017|018|019)-\d{3,4}-\d{4}$/', 'max:13', 'unique:users'],
+        /*'phone' => ['required', 'regex:/^(010|011|016|017|018|019)-\d{3,4}-\d{4}$/', 'max:13', 'unique:users'],*/
+        'phone' => ['required', 'regex:/^(010|011|016|017|018|019)\d{3,4}\d{4}$/', 'max:11', 'unique:users'],
         'password' => 'required|min:6|confirmed',
     );
 

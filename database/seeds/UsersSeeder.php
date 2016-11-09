@@ -16,7 +16,7 @@ class UsersSeeder extends Seeder
             'm_name' => '김수겸',
             'm_email'=>'ikks06luck@naver.com',
             'c_id' => "admin",
-            'phone' => '010-1234-5678',
+            'phone' => '01012345678',
             'password' => bcrypt('admin'),
             'status' => true,
             'role' => 1

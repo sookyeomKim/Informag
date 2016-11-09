@@ -58,7 +58,6 @@ class DbManageFieldController extends Controller
             foreach ($value->db_content as $key => $value) {
                 $arry[$key] = $value;
             }
-
             array_push($resArray, $arry);
         }
         Excel::create('Export Data', function ($excel) use ($resArray) {

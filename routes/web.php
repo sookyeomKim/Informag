@@ -17,7 +17,9 @@
 
 Auth::routes();
 
-Route::resource('/', 'HomeController');
+Route::get('/', function (){
+    return redirect()->route('landing.index');
+});
 Route::resource('client', 'ClientController');
 Route::resource('landing', 'LandingController');
 

@@ -5,8 +5,7 @@
 @section('content')
     <aside class="col-md-2 static-aside">
         <dl>
-            <dt><a class="active">목록</a></dt>
-            <dt><a>추가</a></dt>
+            <dt><a href="{{route('landing.index')}}" class="btn btn-default">목록</a></dt>
         </dl>
     </aside>
     <section class="col-md-10 static-section">

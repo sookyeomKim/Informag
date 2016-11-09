@@ -38,6 +38,20 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('m_email') ? ' has-error' : '' }}">
+                            <label for="m_email" class="col-md-4 control-label">관리자 이메일</label>
+
+                            <div class="col-md-6">
+                                <input id="m_email" type="text" class="form-control" name="m_email" value="{{ old('m_email') }}" required>
+
+                                @if ($errors->has('m_email'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('m_email') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('c_id') ? ' has-error' : '' }}">
                             <label for="c_id" class="col-md-4 control-label">업체ID</label>
 
