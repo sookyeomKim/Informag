@@ -43,6 +43,7 @@ Route::group(['prefix' => 'landingDbField'], function () {
 Route::group(['prefix' => 'DbManageField'], function () {
     Route::post('', ['as' => 'DbManageField.store', 'uses' => 'DbManageFieldController@store']);
     Route::get('{id}', ['as' => 'DbManageField.show', 'uses' => 'DbManageFieldController@show']);
+    Route::get('{id}/excel', ['as' => 'DbManageField.excelExport', 'uses' => 'DbManageFieldController@excelExport']);
 });
 
 /*Route::get('/client', ['as' => 'client.index', 'uses' => 'ClientController@index']);

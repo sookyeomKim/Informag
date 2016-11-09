@@ -71,6 +71,7 @@
                 <div class="form-group">
                     <div class="input-daterange">
                         <div class="col-sm-2">
+                            {{--http://link2me.tistory.com/755--}}
                             <input type="text" class="form-control" id="db-start-date" name="db_start_date" readonly=""
                                    value="{{date("Y-m-d")}}">
                         </div>
@@ -92,6 +93,9 @@
                     </div>
                     <div class="col-sm-2">
                         <button type="submit" class="btn btn-default">검색</button>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="{{route('DbManageField.excelExport',$lan_info->id)}}" class="btn btn-default">엑셀저장</a>
                     </div>
                 </div>
             </form>
