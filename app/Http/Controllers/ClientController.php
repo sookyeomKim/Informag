@@ -19,7 +19,7 @@ class ClientController extends Controller
 
     public function index()
     {
-        $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(5);
+        $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(2);
 
         if (\Request::ajax()) {
             return \Response::json($clients);

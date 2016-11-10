@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 use App\Landing;
 use App\Image;
 use App\Http\Requests;
+use App\User;
 
 class LandingController extends Controller
 {
@@ -21,12 +23,6 @@ class LandingController extends Controller
         $landings = Landing::all();
         return view('layouts.landing.index', compact('landings'));
     }
-
-    /*public function show($name)
-    {
-        $landing = Landing::whereRaw('title = ?', $name)->get()[0];
-        return view('layouts.landing.show', compact('landing'));
-    }*/
 
     public function edit($id)
     {
@@ -45,7 +41,12 @@ class LandingController extends Controller
 
     public function create()
     {
-        return view('layouts.landing.create');
+        $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(2);
+
+        if (\Request::ajax()) {
+            return \Response::json(view('layouts.landing.partial.client_list', compact('clients'))->render());
+        }
+        return view('layouts.landing.create', compact('clients'));
     }
 
     public function store(Request $request)
