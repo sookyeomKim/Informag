@@ -33,29 +33,20 @@ class ClientController extends Controller
         return view('layouts.client.create');
     }
 
-    public function store(Request $request)
+    public function register(Request $request)
     {
-        $sanitizePhone = $request->all();
-        $sanitizePhone['phone'] = formatphonehelper($sanitizePhone['phone']);
-        $request->replace($sanitizePhone);
         $this->validate($request, User::$rules);
 
-        /*$sanitizePhone =$request->all();
-        $sanitizePhone['phone'] = formatphonehelper($sanitizePhone['phone']);
-        $request->replace($sanitizePhone);*/
-        /*echo var_dump($request->input('m_email'));*/
-        /*User::create($request->all());*/
-        /*User::create([
-            'c_name' => $request->input('c_name'),
-            'm_name' => $request->input('m_name'),
-            'm_email' => $request->input('m_email'),
-            'c_id' => $request->input('c_id'),
-            'phone' => $request->input('phone'),
-            'password' => bcrypt($request->input('password')),
-        ]);*/
+        $task = User::create([
+            'c_name' => $request->c_name,
+            'm_name' => $request->m_name,
+            'm_email' => $request->m_email,
+            'c_id' => $request->c_id,
+            'phone' => $request->phone,
+            'password' => bcrypt($request->password),
+            'role' => 1
+        ]);
 
-        $task = User::create($request->all());
         return \Response::json($task);
-        /*return redirect()->route('client.index');*/
     }
 }

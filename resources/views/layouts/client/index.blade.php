@@ -64,16 +64,7 @@
                         <h4 class="modal-title" id="myModalLabel">고객등록 창</h4>
                     </div>
                     <div class="modal-body">
-                        {{--{{ csrf_field() }}--}}
-                        {{--<div class="error-form">
-                            <div class="alert alert-danger">
-                                <strong>Danger!</strong> This alert box could indicate a dangerous or potentially negative action.
-                            </div>
-                            <div class="alert alert-danger">
-                                <strong>Danger!</strong> This alert box could indicate a dangerous or potentially negative action.
-                            </div>
-                        </div>--}}
-
+                        {{ csrf_field() }}
                         <div class="form-group">
                             <label for="c_name" class="col-md-4 control-label">업체명</label>
 
@@ -140,50 +131,41 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" id="clientRegSubmit" class="btn btn-primary">등록</button>
+                        <button type="button" id="clientRegSubmit" class="btn btn-primary">등록</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
 @endsection
-@section('script')
+@section('scripts')
     <script>
         $(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('[name="_token"]').val()
+                }
+            });
+
             $('#clientRegModal').on('shown.bs.modal', function () {
                 $('#c_name').focus()
             });
 
             $('#clientRegSubmit').click(function (e) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('[name="_token"]').val()
-                    }
-                });
 
                 e.preventDefault();
+                client_reg_ajax();
+            });
 
-                var formData = {
-                    c_name: $('#c_name').val(),
-                    m_name: $('#m_name').val(),
-                    m_email: $('#m_email').val(),
-                    c_id: $('#c_id').val(),
-                    phone: $('#phone').val(),
-                    password: $('#password').val(),
-                    password_confirmation: $('#password_confirmation').val()
-                };
-
+            //TODO - list를 ajax로 바꿀 것
+            function client_list_ajax() {
                 $.ajax({
-                    type: 'post',
-                    url: '/client',
+                    type: 'POST',
+                    url: '{{route('client.register')}}',
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
-
-                        /*$('#clientRegForm').trigger("reset");
-                         $('#clientRegModal').modal('hide')*/
 
                         window.location.href = "/client";
                     },
@@ -197,7 +179,39 @@
                         }
                     }
                 });
-            })
+            }
+            
+            function client_reg_ajax() {
+                var formData = {
+                    c_name: $('#c_name').val(),
+                    m_name: $('#m_name').val(),
+                    m_email: $('#m_email').val(),
+                    c_id: $('#c_id').val(),
+                    phone: $('#phone').val(),
+                    password: $('#password').val(),
+                    password_confirmation: $('#password_confirmation').val()
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{route('client.register')}}',
+                    data: formData,
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.href = "/client";
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        if (data.status === 422) {
+                            $.each(JSON.parse(data.responseText), function (key, value) {
+                                $("#" + key).parents('.form-group').addClass('has-error').find('.error-text').text(value).css({
+                                    'color': 'red'
+                                });
+                            })
+                        }
+                    }
+                });
+            }
         });
     </script>
 @endsection

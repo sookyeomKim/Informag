@@ -22,7 +22,7 @@
                     <label for="lan_c_name" class="col-sm-1 control-label">업체명</label>
                     <div class="col-sm-11">
                         <input type="text" class="form-control" id="lan_c_name" name="lan_c_name"
-                               placeholder="업체명을 입력해주세요.">
+                               placeholder="업체명을 선택해주세요." readonly="readonly">
                     </div>
                 </div>
                 <div class="form-group">
@@ -134,6 +134,27 @@
         </form>
     </section>
 @endsection
+
+<!-- Modal -->
+<div class="modal fade" id="c-name-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">업체명 선택</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section('scripts')
     <script src="{{elixir('js/landing-create.js')}}"></script>
     <script>
@@ -151,6 +172,14 @@
                 showUpload: false,
                 maxFileCount: 3
             });
+
+            $("#lan_c_name").click(function () {
+                $("#c-name-modal").modal();
+            })
+
+            $('#c-name-modal').on('show.bs.modal', function () {
+
+            })
         })(jQuery);
     </script>
 @endsection

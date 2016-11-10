@@ -17,14 +17,21 @@
 
 Auth::routes();
 
-Route::get('/', function (){
+Route::get('/', function () {
     return redirect()->route('landing.index');
 });
-Route::resource('client', 'ClientController');
+
 Route::resource('landing', 'LandingController');
 
 Route::post('image', ['as' => 'image.store', 'uses' => 'ImageController@store']);
 Route::post('image/{image_id}', ['as' => 'image.destroy', 'uses' => 'ImageController@destroy']);
+
+/*Route::resource('client', 'ClientController');*/
+
+Route::group(['prefix' => 'client'], function () {
+    Route::post('register', ['as' => 'client.register', 'uses' => 'ClientController@register']);
+    Route::get('', ['as' => 'client.index', 'uses' => 'ClientController@index']);
+});
 
 Route::group(['prefix' => 'landingUrlField'], function () {
     Route::get('check', ['as' => 'landingUrlField.check', 'uses' => 'LandingUrlFieldController@check']);
@@ -47,15 +54,3 @@ Route::group(['prefix' => 'DbManageField'], function () {
     Route::get('{id}', ['as' => 'DbManageField.show', 'uses' => 'DbManageFieldController@show']);
     Route::get('{id}/excel', ['as' => 'DbManageField.excelExport', 'uses' => 'DbManageFieldController@excelExport']);
 });
-
-/*Route::get('/client', ['as' => 'client.index', 'uses' => 'ClientController@index']);
-Route::get('/client/list', ['as' => 'client.list', 'uses' => 'ClientController@getList']);
-Route::get('/client/create', ['as' => 'client.create', 'uses' => 'ClientController@create']);
-Route::post('/client/store', ['as' => 'client.store', 'uses' => 'ClientController@store']);*/
-
-
-/*Route::group(['prefix' => 'client'], function () {
-    Route::get('/', 'ClientController@index');
-    Route::get('/{client_id}', 'ClientController@get');
-    Route::post('/store', 'ClientController@store');
-});*/
