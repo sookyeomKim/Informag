@@ -133,32 +133,64 @@
             </div>
         </form>
     </section>
-@endsection
 
-<!-- Modal -->
-<div class="modal fade" id="c-name-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">업체명 선택</h4>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+    <div class="modal fade" id="c-name-modal" tabindex="-1" role="dialog" aria-labelledby="c-name-modal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="c-name-modal">업체명 선택</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="client-list-table" class="table">
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>등록일</th>
+                            <th>업체명</th>
+                            <th>관리자명</th>
+                            <th>관리자 번호</th>
+                            <th>업체 아이디</th>
+                            <th>상태</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+    <div class="client-table-copy">
+        <table class="client-table">
+            <tr>
+                <td class="client-num"></td>
+                <td class="client-creat-date"></td>
+                <td class="client-c-name"></td>
+                <td class="client-m-name"></td>
+                <td class="client-m-phone"></td>
+                <td class="client-c-id"></td>
+                <td class="client-m-status"></td>
+            </tr>
+        </table>
+    </div>
+    {{--@include('layouts.landing.modal.client_modal',$clients)--}}
+@endsection
 @section('scripts')
     <script src="{{elixir('js/landing-create.js')}}"></script>
     <script>
         (function ($) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('[name="_token"]').val()
+                }
+            });
+
             $('.input-daterange').datepicker({
                 todayBtn: "linked",
                 language: "ko",
@@ -175,11 +207,45 @@
 
             $("#lan_c_name").click(function () {
                 $("#c-name-modal").modal();
-            })
+            });
 
             $('#c-name-modal').on('show.bs.modal', function () {
+                client_list_ajax();
+            });
 
-            })
+            $('#c-name-modal .pagination a').click(function (e) {
+                e.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+
+            });
+
+            function client_list_ajax() {
+                $.ajax({
+                    type: 'get',
+                    url: '{{route('client.index')}}',
+                    success: function (res) {
+                        $('#client-list-table tbody').html('');
+                        $.each(res.data, function (key, value) {
+                            var status_text = '';
+                            $('.client-table-copy tr .client-num').text(value.id);
+                            $('.client-table-copy tr .client-creat-date').text(value.created_at);
+                            $('.client-table-copy tr .client-c-name').text(value.c_name);
+                            $('.client-table-copy tr .client-m-name').text(value.m_name);
+                            $('.client-table-copy tr .client-m-phone').text(value.phone);
+                            $('.client-table-copy tr .client-c-id').text(value.c_id);
+                            value.status === 1 ? status_text = '활성화' : status_text = '비활성화';
+                            $('.client-table-copy tr .client-m-status').text(status_text);
+
+                            var getForm = $('.client-table-copy .client-table tr');
+                            var copyForm = getForm.clone(true);
+                            $('#client-list-table tbody').append(copyForm)
+                        });
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                });
+            }
         })(jQuery);
     </script>
 @endsection

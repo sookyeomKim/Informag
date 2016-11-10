@@ -22,7 +22,7 @@ class ClientController extends Controller
         $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(5);
 
         if (\Request::ajax()) {
-            return \Response::json(User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(5));
+            return \Response::json($clients);
         }
 
         return view('layouts.client.index', compact('clients'));

@@ -22,11 +22,13 @@ Route::get('/', function () {
 });
 
 Route::resource('landing', 'LandingController');
+/*Route::get('landing/userListAjax', ['as' => 'landing.userListAjax', 'uses' => 'LandingController@userListAjax']);*/
+
+Route::resource('client', 'ClientController');
 
 Route::post('image', ['as' => 'image.store', 'uses' => 'ImageController@store']);
 Route::post('image/{image_id}', ['as' => 'image.destroy', 'uses' => 'ImageController@destroy']);
 
-/*Route::resource('client', 'ClientController');*/
 
 Route::group(['prefix' => 'client'], function () {
     Route::post('register', ['as' => 'client.register', 'uses' => 'ClientController@register']);
