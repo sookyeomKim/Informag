@@ -224,22 +224,6 @@
                     type: 'get',
                     url: '{{route('client.index')}}',
                     success: function (res) {
-                        $('#client-list-table tbody').html('');
-                        $.each(res.data, function (key, value) {
-                            var status_text = '';
-                            $('.client-table-copy tr .client-num').text(value.id);
-                            $('.client-table-copy tr .client-creat-date').text(value.created_at);
-                            $('.client-table-copy tr .client-c-name').text(value.c_name);
-                            $('.client-table-copy tr .client-m-name').text(value.m_name);
-                            $('.client-table-copy tr .client-m-phone').text(value.phone);
-                            $('.client-table-copy tr .client-c-id').text(value.c_id);
-                            value.status === 1 ? status_text = '활성화' : status_text = '비활성화';
-                            $('.client-table-copy tr .client-m-status').text(status_text);
-
-                            var getForm = $('.client-table-copy .client-table tr');
-                            var copyForm = getForm.clone(true);
-                            $('#client-list-table tbody').append(copyForm)
-                        });
                     },
                     error: function (data) {
                         console.log(data)
