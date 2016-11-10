@@ -33,7 +33,7 @@
                         <td>{{$client->m_name}}</td>
                         <td>{{$client->phone}}</td>
                         <td>{{$client->c_id}}</td>
-                        <td>{{$client->c_name}}</td>
+                        <td>{{$client->status}}</td>
                         <td>
                             <div class="btn-group">
                                 <a href="javascript:void(0)" class="btn">ON</a>

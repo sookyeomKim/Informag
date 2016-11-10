@@ -41,6 +41,6 @@ class CreateLandingsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('landings');
+        Schema::dropIfExists('landings');
     }
 }

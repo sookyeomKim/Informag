@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/landing';
 
     /**
      * Create a new controller instance.
@@ -40,5 +40,10 @@ class LoginController extends Controller
     public function username()
     {
         return 'c_id';
+    }
+
+    public function redirectPath()
+    {
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/landing';
     }
 }

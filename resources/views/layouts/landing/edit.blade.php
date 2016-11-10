@@ -5,8 +5,8 @@
 @section('content')
     <aside class="col-md-2 static-aside">
         <dl>
-            <dt><a class="active">목록</a></dt>
-            <dt><a>추가</a></dt>
+            <dt><a href="{{route('landing.index')}}" class="btn btn-default">목록</a></dt>
+            <dt><a href="{{route('landing.create')}}" class="btn btn-default">추가</a></dt>
         </dl>
     </aside>
     <section class="col-md-10 static-section">
@@ -26,7 +26,7 @@
                     <label for="lan_c_name" class="col-sm-1 control-label">업체명</label>
                     <div class="col-sm-11">
                         <input type="text" class="form-control" id="lan_c_name" name="lan_c_name"
-                               placeholder="업체명을 입력해주세요." value="{{$landing->lan_c_name}}">
+                               placeholder="업체명을 입력해주세요." value="{{$landing->lan_c_name}}" readonly="readonly">
                     </div>
                 </div>
                 <div class="form-group">
@@ -169,9 +169,9 @@
                             <option value="kakao">카카오</option>
                         </select>
                     </div>
-                    <div class="col-sm-1">
+                    {{--<div class="col-sm-1">
                         <button type="button" id="url-check-button" class="btn btn-lc1 form-control">중복체크</button>
-                    </div>
+                    </div>--}}
                     <div class="col-sm-1">
                         <button type="button" id="url-add-button" class="btn btn-lc3 form-control">추가</button>
                     </div>
@@ -209,8 +209,8 @@
                 <p>최대 20개 까지만 등록 가능합니다. 등록 후 삭제가 불가능하며, 비활성화만 가능합니다.<br>
                     비활성화된 항목은 유저 페이지에 노출되지 않습니다.</p>
                 <div class="form-group">
-                    <div class="form-input-wrap">
-                        <label for="dataType" class="col-sm-2 control-label">데이터타입</label>
+                    <div class="form-type-wrap">
+                        <label for="lan-db-types" class="col-sm-2 control-label">데이터타입</label>
                         <div class="col-sm-10">
                             <select id="lan-db-types" class="form-control">
                                 <option value="1">DB입력창</option>
@@ -221,15 +221,13 @@
                     <div class="form-input-wrap">
                         <label for="lan-db-title" class="col-sm-2 control-label">필드명</label>
                         <div class="col-sm-10">
-                            <input type="text" id="lan-db-title" name="lan-db-title" class="form-control"
-                                   placeholder="Caption">
+                            <input type="text" id="lan-db-title" name="lan-db-title" class="form-control">
                         </div>
                     </div>
                     <div class="phone-input-wrap">
                         <label for="lan-db-phone" class="col-sm-2 control-label">전화번호</label>
                         <div class="col-sm-10">
-                            <input type="text" id="lan-db-phone" name="lan-db-title" class="form-control"
-                                   placeholder="Caption">
+                            <input type="text" id="lan-db-phone" name="lan-db-title" class="form-control">
                         </div>
                     </div>
                     <div class="col-sm-12 text-right">
@@ -241,7 +239,52 @@
                         <thead>
                         <tr>
                             <th>No.</th>
-                            <th class="db-title">DB필드명</th>
+                            <th class="db-name-title"></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+            {{--복사할 DB 로우--}}
+            <div class="db-table-copy">
+                <table class="db-table">
+                    <tr>
+                        <td class="db-num"></td>
+                        <td class="db-name"></td>
+                        <td class="db-delete"></td>
+                    </tr>
+                </table>
+            </div>
+            <hr>
+            <fieldset>
+                <legend>약관</legend>
+                <p>최대 20개 까지만 등록 가능합니다. 등록 후 삭제가 불가능하며, 비활성화만 가능합니다.<br>
+                    비활성화된 항목은 유저 페이지에 노출되지 않습니다.</p>
+                <div class="form-group">
+                    <label for="lan_terms_name" class=" col-sm-1 control-label">약관명</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="lan_terms_name" class="form-control">
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" id="clause-add-button" class="btn btn-lc3">추가</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lan_terms_content" class=" col-sm-1 control-label">내용</label>
+                    <div class="col-sm-10">
+                        <textarea type="text" id="lan_terms_content" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="clause-table-wrap col-sm-offset-1">
+                    <table id="clause-field-table" class="table">
+                        <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>약관명</th>
+                            <th>내용</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -252,86 +295,67 @@
             </fieldset>
 
             {{--복사할 DB 로우--}}
-            <div class="db-table-copy">
-                <table class="db-table">
+            <div class="clause-table-copy">
+                <table class="clause-table">
                     <tr>
-                        <td class="db-num"></td>
-                        <td class="db-title"></td>
-                        <td class="db-delete"></td>
+                        <td class="clause-num"></td>
+                        <td class="clause-title"></td>
+                        <td class="clause-content"></td>
+                        <td class="clause-manage">
+                            <a type="button" class="btn btn-default">수정</a>
+                            <a type="button" class="btn btn-default delete-button">삭제</a>
+                        </td>
                     </tr>
                 </table>
             </div>
             <hr>
-            <fieldset>
-                <legend>DB입력 필드 구성</legend>
-                <p>최대 20개 까지만 등록 가능합니다. 등록 후 삭제가 불가능하며, 비활성화만 가능합니다.<br>
-                    비활성화된 항목은 유저 페이지에 노출되지 않습니다.</p>
-                <div class="form-group">
-                    <label for="clauseName" class=" col-sm-1 control-label">약관명</label>
-                    <div class="col-sm-10">
-                        <input type="text" id="clauseName" placeholder="Caption" class="form-control">
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-lc3 form-control">추가</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="clauseContent" class=" col-sm-1 control-label">내용</label>
-                    <div class="col-sm-10">
-                        <textarea type="text" id="clauseContent" class="form-control"></textarea>
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-lc3 form-control">추가</button>
-                    </div>
-                </div>
-                <div class="clause-table-wrap col-sm-offset-1">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>약관명</th>
-                            <th>내용</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td><input type="text" class="form-control" placeholder="약관명"></td>
-                            <td><textarea class="form-control" placeholder="약관내용"></textarea></td>
-                            <td>
-                                <div class="clause-wrap">
-                                    <div>
-                                        <button type="button" class="btn btn-lc4">수정</button>
-                                    </div>
-                                    <div>
-                                        <button type="button" class="btn btn-lc4">삭제</button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>난 유알엘이당</td>
-                            <td></td>
-                            <td>
-                                <button type="button" class="btn btn-lc4">수정</button>
-                                <button type="button" class="btn btn-lc4">삭제</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </fieldset>
-            <hr>
         </form>
     </section>
+    <div class="modal fade" id="c-name-modal" tabindex="-1" role="dialog" aria-labelledby="c-name-modal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="c-name-modal">업체명 선택</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <select class="form-control" id="client-column-select">
+                                    <option value="c_name">업체명</option>
+                                    <option value="m_name">관리자 이름</option>
+                                    <option value="phone">관리자 번호</option>
+                                    <option value="m_email">관리자 이메일</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" id="client-value-text">
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" id="client-search-button" class="btn btn-default">검색</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="client-list-table-wrap">
+                        @include('layouts.landing.partial.client_list')
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 {{--'<img src="{{asset('uploads/images/'.$image->image_name)}}" class="kv-preview-data file-preview-image" style="height:160px"',--}}
 @section('scripts')
     <script src="{{elixir('js/landing-create.js')}}"></script>
     <script>
         (function ($) {
+            var currentVal = $("#lan-db-types").val();
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('[name="_token"]').val()
@@ -341,6 +365,8 @@
             url_index_ajax();
 
             db_index_ajax();
+
+            clause_index_ajax();
 
             db_input_trigger();
 
@@ -385,10 +411,10 @@
                 ]
             });
 
-            $("#url-check-button").click(function (e) {
+            /*$("#url-check-button").click(function (e) {
                 e.preventDefault();
                 url_check_ajax();
-            });
+            });*/
 
             $("#url-add-button").click(function (e) {
                 e.preventDefault();
@@ -396,12 +422,82 @@
             });
 
             $("#lan-db-types").change(function () {
+                var newVal = $(this).val();
+
+                if ($('#db-field-table').find('.db-name').text() !== '') {
+                    alert('필드를 먼저 전부 삭제해주세요.');
+                    $(this).val(currentVal);
+                    return;
+                }
+                currentVal = newVal;
                 db_input_trigger();
-            });
+            })
 
             $("#db-add-button").click(function () {
                 db_reg_ajax();
             });
+
+            $('#db-field-table').on('click', '.delete-button', function () {
+                var id = $(this).attr('data-id');
+                db_del_ajax(id)
+            });
+
+            $('#clause-add-button').click(function () {
+                clause_reg_ajax();
+            });
+
+            $('#clause-field-table').on('click', '.delete-button', function () {
+                var id = $(this).attr('data-id');
+                clause_del_ajax(id)
+            });
+
+            $('#lan_c_name').click(function () {
+                $("#c-name-modal").modal();
+            });
+
+            $('#client-search-button').click(function () {
+                client_list_ajax();
+                client_select();
+            });
+
+            $('#c-name-modal').on('shown.bs.modal', function () {
+                client_ajax_click_event();
+                client_select();
+            });
+
+            function client_ajax_click_event() {
+                $('#client-list-pagination a').click(function (e) {
+                    e.preventDefault();
+                    var page = $(this).attr('href').split('page=')[1];
+                    page === undefined ? page = 1 : page;
+                    client_list_ajax(page);
+                    client_select();
+                });
+            }
+
+            function client_select() {
+                $('#client-list-table tbody tr').click(function () {
+                    var c_name_txt = $(this).find('.client-c-name').text();
+                    $("#lan_c_name").val(c_name_txt);
+                    $('#c-name-modal').modal('hide')
+                });
+            }
+
+            function client_list_ajax(page) {
+                var formData = {
+                    client_column_select: $('#client-column-select').val(),
+                    client_value_text: $('#client-value-text').val()
+                };
+
+                $.ajax({
+                    url: '{{route('landing.create')}}?page=' + page,
+                    data: formData,
+                    dataType: 'json'
+                }).done(function (data) {
+                    $('#client-list-table-wrap').html(data);
+                    client_ajax_click_event();
+                })
+            }
 
             function url_index_ajax() {
                 $(".url-table-copy").css({
@@ -421,7 +517,7 @@
                         $('#url-field-table tbody').html('');
                         $.each(data, function (key, value) {
                             var url = 'landingUrlField\/' + value.lan_url;
-                            $('.url-table-copy tr .url-num').text(value.id);
+                            $('.url-table-copy tr .url-num').text(key + 1);
                             $('.url-table-copy tr .url-name').html('<a data-url-name="' + value.lan_url + '" class="open-landing">landing/' + value.lan_url + '</a>');
                             $('.url-table-copy tr .url-delete').html('<a>삭제</a>');
 
@@ -445,7 +541,7 @@
                 })
             }
 
-            function url_check_ajax() {
+            /*function url_check_ajax() {
                 var formData = {
                     lan_url: $('[name="lan-url"]').val()
                 };
@@ -462,7 +558,7 @@
                         console.log(data)
                     }
                 });
-            }
+            }*/
 
             function url_reg_ajax() {
                 var formData = {
@@ -486,7 +582,7 @@
             }
 
             function db_input_trigger() {
-                $("#lan-db-types option:selected").each(function () {
+                $("#lan-db-types").each(function () {
                     $('[name="lan-db-title"]').val("");
                     if ($(this).val() === '1') {
                         $(".form-input-wrap").css({
@@ -495,7 +591,7 @@
                         $(".phone-input-wrap").css({
                             'display': 'none'
                         });
-                        $(".db-title").text('DB필드명');
+                        $(".db-name-title").text('DB필드명');
                     } else {
                         $(".form-input-wrap").css({
                             'display': 'none'
@@ -503,7 +599,7 @@
                         $(".phone-input-wrap").css({
                             'display': 'block'
                         });
-                        $(".db-title").text('전화번호');
+                        $(".db-name-title").text('전화번호');
                     }
                 });
             }
@@ -523,12 +619,17 @@
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
+                        if (data[0].lan_db_types === 'phone') {
+                            $('#lan-db-types').val(2)
+                        } else {
+                            $('#lan-db-types').val(1)
+                        }
                         $('#db-field-table tbody').html('');
                         $.each(data, function (key, value) {
                             var url = 'landingUrlField\/' + value.lan_url;
-                            $('.db-table-copy tr .db-num').text(value.id);
-                            $('.db-table-copy tr .db-title').text(value.lan_db_title);
-                            $('.db-table-copy tr .db-delete').html('<a>삭제</a>');
+                            $('.db-table-copy tr .db-num').text(key + 1);
+                            $('.db-table-copy tr .db-name').text(value.lan_db_title);
+                            $('.db-table-copy tr .db-delete').html('<a class="btn btn-default delete-button" data-id="' + value.id + '">삭제</a>');
 
                             var getForm = $('.db-table-copy .db-table tr');
                             var copyForm = getForm.clone(true);
@@ -542,15 +643,19 @@
             }
 
             function db_reg_ajax() {
-                var title_name;
+                var field_name;
                 if ($('#lan-db-types option:selected').val() === '1') {
-                    title_name = $('#lan-db-title').val();
+                    field_name = $('#lan-db-title').val();
                 } else {
-                    title_name = $('#lan-db-phone').val();
+                    if ($('#db-field-table').find('.db-name').length > 0) {
+                        alert('전화번호는 한번만 입력할 수 있습니다.');
+                        return;
+                    }
+                    field_name = $('#lan-db-phone').val();
                 }
 
                 var formData = {
-                    lan_db_title: title_name,
+                    lan_db_title: field_name,
                     lan_db_types: Number($('#lan-db-types option:selected').val()),
                     lan_id:{{$landing->id}}
                 };
@@ -561,11 +666,100 @@
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
+                        $('[name="lan-db-title"]').val('');
                         db_index_ajax();
                     },
                     error: function (data) {
                         console.log();
-                        /*$("#debug").html(data.responseText)*/
+                    }
+                });
+            }
+
+            function db_del_ajax(id) {
+                var formData = {
+                    id: id
+                };
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: '{{route('landingDbField.destroy')}}',
+                    data: formData,
+                    dataType: 'json',
+                    success: function (data) {
+                        db_index_ajax();
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                });
+            }
+
+            function clause_index_ajax() {
+                $(".clause-table-copy").css({
+                    "display": "none"
+                });
+
+                $.ajax({
+                    type: 'get',
+                    url: '{{route('landingClauseField.index',$landing->id)}}',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#clause-field-table tbody').html('');
+                        $.each(data, function (key, value) {
+                            $('.clause-table-copy tr .clause-num').text(key + 1);
+                            $('.clause-table-copy tr .clause-title').text(value.lan_terms_name);
+                            $('.clause-table-copy tr .clause-content').text(value.lan_terms_content);
+                            $('.clause-table-copy tr .clause-manage').find('.delete-button').attr('data-id', value.id);
+
+                            var getForm = $('.clause-table-copy .clause-table tr');
+                            var copyForm = getForm.clone(true);
+                            $('#clause-field-table tbody').append(copyForm)
+                        });
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                });
+            }
+
+            function clause_reg_ajax() {
+                var formData = {
+                    lan_terms_name: $('#lan_terms_name').val(),
+                    lan_terms_content: $('#lan_terms_content').val(),
+                    lan_id:{{$landing->id}}
+                };
+
+                $.ajax({
+                    type: 'post',
+                    url: '{{route('landingClauseField.store')}}',
+                    data: formData,
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#lan_terms_name').val('');
+                        $('#lan_terms_content').val('');
+                        clause_index_ajax();
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                });
+            }
+
+            function clause_del_ajax(id) {
+                var formData = {
+                    id: id
+                };
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: '{{route('landingClauseField.destroy')}}',
+                    data: formData,
+                    dataType: 'json',
+                    success: function (data) {
+                        clause_index_ajax();
+                    },
+                    error: function (data) {
+                        console.log(data)
                     }
                 });
             }

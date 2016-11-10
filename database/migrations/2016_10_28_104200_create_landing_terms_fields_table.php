@@ -16,7 +16,7 @@ class CreateLandingTermsFieldsTable extends Migration
         Schema::create('landing_terms_fields', function (Blueprint $table) {
             $table->increments('id');
             $table->string('lan_terms_name');
-            $table->string('lan_terms_content');
+            $table->text('lan_terms_content');
             $table->integer('lan_id')->unsigned();
             $table->foreign('lan_id')
                 ->references('id')->on('landings')

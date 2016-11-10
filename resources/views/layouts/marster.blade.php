@@ -12,8 +12,8 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{elixir('css/main.css')}}">
-    @yield('styles')
-    <!-- Scripts -->
+@yield('styles')
+<!-- Scripts -->
     <script>
         window.Laravel = <?php echo json_encode([
                 'csrfToken' => csrf_token(),
@@ -45,9 +45,13 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">                    &nbsp;
-                        <li><a class="" href="{{route('landing.index')}}">랜딩페이지 관리</a>
-                        </li>
-                        <li><a class="" href="{{route('client.index')}}">고객 관리</a></li>
+                        @if(!Auth::guest())
+                            <li><a class="" href="{{route('landing.index')}}">랜딩페이지 관리</a>
+                            </li>
+                            @if(Auth::user()->hasRole(['Administrator']))
+                                <li><a class="" href="{{route('client.index')}}">고객 관리</a></li>
+                            @endif
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -55,7 +59,7 @@
                         <!-- Authentication Links -->
                         @if (Auth::guest())
                             <li><a href="{{ url('/login') }}">로그인</a></li>
-                            <li><a href="{{ url('/register') }}">회원가입</a></li>
+                            {{--<li><a href="{{ url('/register') }}">회원가입</a></li>--}}
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"

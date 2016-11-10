@@ -18,10 +18,6 @@ class LandingDbFieldController extends Controller
 
     public function store(Request $request)
     {
-        /*$ldf = new LandingDbField();
-        $ldf->lan_db_title = $request->lan_db_title;
-        $ldf->lan_db_types = 1;
-        $task = $ldf->save();*/
         $task = LandingDbField::create($request->all());
         return \Response::json($task);
     }
@@ -32,8 +28,9 @@ class LandingDbFieldController extends Controller
         return \Response::json($task);
     }
 
-    public function destroy()
+    public function destroy(Request $request)
     {
-
+        $task = LandingDbField::destroy($request->id);
+        return \Response::json($task);
     }
 }

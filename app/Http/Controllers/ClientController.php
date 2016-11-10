@@ -12,25 +12,16 @@ use Validator;
 
 class ClientController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     public function index()
     {
-        $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(2);
+        $clients = User::whereRaw('role_id = ?', 5)->orderBy('id', 'desc')->paginate(2);
 
         if (\Request::ajax()) {
             return \Response::json($clients);
         }
 
         return view('layouts.client.index', compact('clients'));
-    }
-
-    public function create()
-    {
-        return view('layouts.client.create');
     }
 
     public function register(Request $request)
@@ -43,8 +34,7 @@ class ClientController extends Controller
             'm_email' => $request->m_email,
             'c_id' => $request->c_id,
             'phone' => $request->phone,
-            'password' => bcrypt($request->password),
-            'role' => 1
+            'password' => bcrypt($request->password)
         ]);
 
         return \Response::json($task);

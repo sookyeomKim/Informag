@@ -19,6 +19,8 @@ class DbManageFieldController extends Controller
 
     public function show($id, Request $request)
     {
+        $roleCheck = \Auth::user()->hasRole(['Administrator']);
+
         $lan_info = Landing::findOrFail($id);
         $dmf_info = $lan_info->db_manage_fields;
         $url_info = $lan_info->url_fields;
@@ -32,7 +34,7 @@ class DbManageFieldController extends Controller
         }
 
         $db_info = $lan_info->db_fields;
-        return view('layouts.landing.db_show', compact('dmf_info', 'lan_info', 'url_info', 'db_list', 'db_info'));
+        return view('layouts.landing.db_show', compact('dmf_info', 'lan_info', 'url_info', 'db_list', 'db_info', 'roleCheck'));
     }
 
     public function excelExport($id, Request $request)
@@ -52,7 +54,7 @@ class DbManageFieldController extends Controller
         foreach ($db_list as $value) {
             $created_at = $value->created_at->format('Y-m-d H:i:s');
             $db_inflow = $value->db_inflow;
-            $arry = array('No.' => $value->id,'생성일' => $created_at, '유입경로' => $db_inflow);
+            $arry = array('No.' => $value->id, '생성일' => $created_at, '유입경로' => $db_inflow);
             foreach ($value->db_content as $key => $value) {
                 $arry[$key] = $value;
             }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -15,8 +14,10 @@ class LandingController extends Controller
 {
     public function index()
     {
+        $roleCheck = \Auth::user()->hasRole(['Administrator']);
+
         $landings = Landing::paginate(20);
-        return view('layouts.landing.index', compact('landings'));
+        return view('layouts.landing.index', compact('landings', 'roleCheck'));
     }
 
     public function edit($id, Request $request)
@@ -24,9 +25,9 @@ class LandingController extends Controller
         $landing = Landing::find($id);
 
         if ($request->client_value_text) {
-            $clients = User::whereRaw('role = ?', 'client')->where($request->client_column_select, '=', $request->client_value_text)->orderBy('id', 'desc')->paginate(2);
+            $clients = User::whereRaw('role_id = ?', 5)->where($request->client_column_select, '=', $request->client_value_text)->orderBy('id', 'desc')->paginate(10);
         } else {
-            $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(2);
+            $clients = User::whereRaw('role_id = ?', 5)->orderBy('id', 'desc')->paginate(10);
         }
 
         if (\Request::ajax()) {
@@ -47,9 +48,9 @@ class LandingController extends Controller
     public function create(Request $request)
     {
         if ($request->client_value_text) {
-            $clients = User::whereRaw('role = ?', 'client')->where($request->client_column_select, '=', $request->client_value_text)->orderBy('id', 'desc')->paginate(2);
+            $clients = User::whereRaw('role_id = ?', 5)->where($request->client_column_select, '=', $request->client_value_text)->orderBy('id', 'desc')->paginate(10);
         } else {
-            $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(2);
+            $clients = User::whereRaw('role_id = ?', 5)->orderBy('id', 'desc')->paginate(10);
         }
 
         if (\Request::ajax()) {

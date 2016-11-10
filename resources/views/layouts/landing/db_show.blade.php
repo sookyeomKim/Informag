@@ -5,7 +5,9 @@
 @section('content')
     <aside class="col-md-2">
         <dl>
-            <dt><a class="btn btn-default" href="">추가</a></dt>
+            @if($roleCheck)
+                <dt><a class="btn btn-default" href="{{url('landing/create')}}">추가</a></dt>
+            @endif
         </dl>
     </aside>
     <div class="col-md-10">
@@ -24,7 +26,7 @@
                         <th>담당자</th>
                         <th>시작일</th>
                         <th>종료일</th>
-                        <th>조회사</th>
+                        <th>조회수</th>
                         <th>DB수</th>
                     </tr>
                     </thead>

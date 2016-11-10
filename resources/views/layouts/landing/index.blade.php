@@ -1,9 +1,10 @@
 @extends('layouts.marster')
-
 @section('content')
     <aside class="col-md-2">
         <dl>
-            <dt><a class="btn btn-default" href="{{url('landing/create')}}">추가</a></dt>
+            @if($roleCheck)
+                <dt><a class="btn btn-default" href="{{url('landing/create')}}">추가</a></dt>
+            @endif
         </dl>
     </aside>
     <section class="col-md-10">
@@ -30,7 +31,11 @@
                     <tr>
                         <td>{{$landing->created_at}}</td>
                         <td>{{$landing->lan_c_name}}</td>
-                        <td><a href="{{route('landing.edit',$landing->id)}}">{{$landing->lan_title}}</a></td>
+                        @if($roleCheck)
+                            <td><a href="{{route('landing.edit',$landing->id)}}">{{$landing->lan_title}}</a></td>
+                        @else
+                            <td><a href="{{route('DbManageField.show',$landing->id)}}">{{$landing->lan_title}}</a></td>
+                        @endif
                         <td>{{$landing->lan_m_name}}</td>
                         <td>{{$landing->lan_start_date}}</td>
                         <td>{{$landing->lan_end_date}}</td>
@@ -39,34 +44,20 @@
                             <button type="button" class="btn btn-default">종료</button>
                         </td>
                         <td></td>
-                        <td>
-                            <a href="{{route('DbManageField.show',$landing->id)}}">{{$landing->db_manage_fields->count()}}</a>
-                        </td>
+                        @if($roleCheck)
+                            <td>
+                                <a href="{{route('DbManageField.show',$landing->id)}}">{{$landing->db_manage_fields->count()}}</a>
+                            </td>
+                        @else
+                            <td>{{$landing->db_manage_fields->count()}}</td>
+                        @endif
                     </tr>
                 @endforeach
                 </tbody>
             </table>
         </div>
         <div class="text-center">
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    <li>
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            {{$landings->links()}}
         </div>
     </section>
 @endsection

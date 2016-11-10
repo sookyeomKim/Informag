@@ -19,7 +19,7 @@ class UsersSeeder extends Seeder
             'phone' => '01012345678',
             'password' => bcrypt('admin'),
             'status' => true,
-            'role' => 1
+            'role_id' => 2
         ]);
     }
 }
