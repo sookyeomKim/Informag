@@ -13,21 +13,26 @@ use App\User;
 
 class LandingController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
-        $landings = Landing::all();
+        $landings = Landing::paginate(20);
         return view('layouts.landing.index', compact('landings'));
     }
 
-    public function edit($id)
+    public function edit($id, Request $request)
     {
         $landing = Landing::find($id);
-        return view('layouts.landing.edit', compact('landing'));
+
+        if ($request->client_value_text) {
+            $clients = User::whereRaw('role = ?', 'client')->where($request->client_column_select, '=', $request->client_value_text)->orderBy('id', 'desc')->paginate(2);
+        } else {
+            $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(2);
+        }
+
+        if (\Request::ajax()) {
+            return \Response::json(view('layouts.landing.partial.client_list', compact('clients'))->render());
+        }
+        return view('layouts.landing.edit', compact('landing', 'clients'));
     }
 
     public function update($id)
@@ -46,7 +51,6 @@ class LandingController extends Controller
         } else {
             $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(2);
         }
-
 
         if (\Request::ajax()) {
             return \Response::json(view('layouts.landing.partial.client_list', compact('clients'))->render());

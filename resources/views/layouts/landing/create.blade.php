@@ -165,86 +165,85 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
     </div>
-
-
 @endsection
 @section('scripts')
     <script src="{{elixir('js/landing-create.js')}}"></script>
     <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('[name="_token"]').val()
-            }
-        });
+        (function ($) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('[name="_token"]').val()
+                }
+            });
 
-        $('.input-daterange').datepicker({
-            todayBtn: "linked",
-            language: "ko",
-            startDate: "today",
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
+            $('.input-daterange').datepicker({
+                todayBtn: "linked",
+                language: "ko",
+                startDate: "today",
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
 
-        $('#lan_image').fileinput({
-            browseClass: "btn btn-default",
-            showUpload: false,
-            maxFileCount: 3
-        });
+            $('#lan_image').fileinput({
+                browseClass: "btn btn-default",
+                showUpload: false,
+                maxFileCount: 3
+            });
 
-        $('#lan_c_name').click(function () {
-            $("#c-name-modal").modal();
-        });
+            $('#lan_c_name').click(function () {
+                $("#c-name-modal").modal();
+            });
 
-        $('#client-search-button').click(function () {
-            client_list_ajax();
-            client_select();
-        });
-
-        $('#c-name-modal').on('shown.bs.modal', function () {
-            client_ajax_click_event();
-            client_select();
-        });
-
-
-        function client_ajax_click_event() {
-            $('#client-list-pagination a').click(function (e) {
-                e.preventDefault();
-                var page = $(this).attr('href').split('page=')[1];
-                page === undefined ? page = 1 : page;
-                client_list_ajax(page);
+            $('#client-search-button').click(function () {
+                client_list_ajax();
                 client_select();
             });
-        }
 
-        function client_select() {
-            $('#client-list-table tbody tr').click(function () {
-                var c_name_txt = $(this).find('.client-c-name').text();
-                $("#lan_c_name").val(c_name_txt);
-                $('#c-name-modal').modal('hide')
-            });
-        }
-
-        function client_list_ajax(page) {
-            var formData = {
-                client_column_select: $('#client-column-select').val(),
-                client_value_text: $('#client-value-text').val()
-            };
-
-            $.ajax({
-                url: '{{route('landing.create')}}?page=' + page,
-                data: formData,
-                dataType: 'json'
-            }).done(function (data) {
-                $('#client-list-table-wrap').html(data);
+            $('#c-name-modal').on('shown.bs.modal', function () {
                 client_ajax_click_event();
-            })
-        }
+                client_select();
+            });
+
+
+            function client_ajax_click_event() {
+                $('#client-list-pagination a').click(function (e) {
+                    e.preventDefault();
+                    var page = $(this).attr('href').split('page=')[1];
+                    page === undefined ? page = 1 : page;
+                    client_list_ajax(page);
+                    client_select();
+                });
+            }
+
+            function client_select() {
+                $('#client-list-table tbody tr').click(function () {
+                    var c_name_txt = $(this).find('.client-c-name').text();
+                    $("#lan_c_name").val(c_name_txt);
+                    $('#c-name-modal').modal('hide')
+                });
+            }
+
+            function client_list_ajax(page) {
+                var formData = {
+                    client_column_select: $('#client-column-select').val(),
+                    client_value_text: $('#client-value-text').val()
+                };
+
+                $.ajax({
+                    url: '{{route('landing.create')}}?page=' + page,
+                    data: formData,
+                    dataType: 'json'
+                }).done(function (data) {
+                    $('#client-list-table-wrap').html(data);
+                    client_ajax_click_event();
+                })
+            }
+        })(jQuery);
     </script>
 @endsection
 {{--
