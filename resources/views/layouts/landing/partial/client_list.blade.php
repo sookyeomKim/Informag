@@ -1,4 +1,4 @@
-<table class="table">
+<table id="client-list-table" class="table">
     <thead>
     <tr>
         <th>번호</th>
@@ -13,13 +13,13 @@
     <tbody>
     @foreach($clients as $client)
         <tr>
-            <td>{{$client->id}}</td>
-            <td>{{$client->created_at}}</td>
-            <td>{{$client->c_name}}</td>
-            <td>{{$client->m_name}}</td>
-            <td>{{$client->phone}}</td>
-            <td>{{$client->c_id}}</td>
-            <td>{{$client->status}}</td>
+            <td class="client-num">{{$client->id}}</td>
+            <td class="client-create-date">{{$client->created_at}}</td>
+            <td class="client-c-name">{{$client->c_name}}</td>
+            <td class="client-m-name">{{$client->m_name}}</td>
+            <td class="client-m-phone">{{$client->phone}}</td>
+            <td class="client-c-id">{{$client->c_id}}</td>
+            <td class="client-m-status">{{$client->status}}</td>
         </tr>
     @endforeach
     </tbody>

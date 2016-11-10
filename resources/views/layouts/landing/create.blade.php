@@ -142,7 +142,27 @@
                     <h4 class="modal-title" id="c-name-modal">업체명 선택</h4>
                 </div>
                 <div class="modal-body">
-                    @include('layouts.landing.partial.client_list')
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <select class="form-control" id="client-column-select">
+                                    <option value="c_name">업체명</option>
+                                    <option value="m_name">관리자 이름</option>
+                                    <option value="phone">관리자 번호</option>
+                                    <option value="m_email">관리자 이메일</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" id="client-value-text">
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" id="client-search-button" class="btn btn-default">검색</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="client-list-table-wrap">
+                        @include('layouts.landing.partial.client_list')
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -171,33 +191,57 @@
             autoclose: true
         });
 
-        $("#lan_image").fileinput({
+        $('#lan_image').fileinput({
             browseClass: "btn btn-default",
             showUpload: false,
             maxFileCount: 3
         });
 
-        $("#lan_c_name").click(function () {
+        $('#lan_c_name').click(function () {
             $("#c-name-modal").modal();
+        });
+
+        $('#client-search-button').click(function () {
+            client_list_ajax();
+            client_select();
         });
 
         $('#c-name-modal').on('shown.bs.modal', function () {
             client_ajax_click_event();
+            client_select();
         });
+
 
         function client_ajax_click_event() {
             $('#client-list-pagination a').click(function (e) {
                 e.preventDefault();
                 var page = $(this).attr('href').split('page=')[1];
-                client_list_ajax(page)
+                page === undefined ? page = 1 : page;
+                client_list_ajax(page);
+                client_select();
+            });
+        }
+
+        function client_select() {
+            $('#client-list-table tbody tr').click(function () {
+                var c_name_txt = $(this).find('.client-c-name').text();
+                $("#lan_c_name").val(c_name_txt);
+                $('#c-name-modal').modal('hide')
             });
         }
 
         function client_list_ajax(page) {
+            var formData = {
+                client_column_select: $('#client-column-select').val(),
+                client_value_text: $('#client-value-text').val()
+            };
+
             $.ajax({
-                url: '{{route('landing.create')}}?page=' + page
+                url: '{{route('landing.create')}}?page=' + page,
+                data: formData,
+                dataType: 'json'
             }).done(function (data) {
-                $('.modal-body').html(data);
+                $('#client-list-table-wrap').html(data);
                 client_ajax_click_event();
             })
         }

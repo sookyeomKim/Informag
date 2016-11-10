@@ -39,9 +39,14 @@ class LandingController extends Controller
         return redirect()->route('landing.edit', $landing_id);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(2);
+        if ($request->client_value_text) {
+            $clients = User::whereRaw('role = ?', 'client')->where($request->client_column_select, '=', $request->client_value_text)->orderBy('id', 'desc')->paginate(2);
+        } else {
+            $clients = User::whereRaw('role = ?', 'client')->orderBy('id', 'desc')->paginate(2);
+        }
+
 
         if (\Request::ajax()) {
             return \Response::json(view('layouts.landing.partial.client_list', compact('clients'))->render());

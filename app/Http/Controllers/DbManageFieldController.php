@@ -23,7 +23,6 @@ class DbManageFieldController extends Controller
         $dmf_info = $lan_info->db_manage_fields;
         $url_info = $lan_info->url_fields;
         if ($request->db_search_text) {
-            /*$db_list = $lan_info->db_manage_fields()->where('db_content->name', $request->db_search_text)->paginate(5);*/
             $db_list = $lan_info->db_manage_fields()->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])
                 ->where('db_content->' . $request->db_title_select, '=', $request->db_search_text)->paginate(5);
         } elseif ($request->db_start_date && !$request->db_search_text) {
@@ -31,7 +30,6 @@ class DbManageFieldController extends Controller
         } else {
             $db_list = $lan_info->db_manage_fields()->paginate(5);
         }
-        /*$db_list = $lan_info->db_manage_fields;*/
 
         $db_info = $lan_info->db_fields;
         return view('layouts.landing.db_show', compact('dmf_info', 'lan_info', 'url_info', 'db_list', 'db_info'));
