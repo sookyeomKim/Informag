@@ -398,7 +398,6 @@
                         @foreach($landing->images as $image)
                     {
                         caption: "{{$image->image_name}}",
-                        size: 827000,
                         width: "120px",
                         url: "{{route('image.destroy',$image->id)}}",
                         key:{{$image->id}},
@@ -412,9 +411,9 @@
             });
 
             /*$("#url-check-button").click(function (e) {
-                e.preventDefault();
-                url_check_ajax();
-            });*/
+             e.preventDefault();
+             url_check_ajax();
+             });*/
 
             $("#url-add-button").click(function (e) {
                 e.preventDefault();
@@ -542,23 +541,23 @@
             }
 
             /*function url_check_ajax() {
-                var formData = {
-                    lan_url: $('[name="lan-url"]').val()
-                };
+             var formData = {
+             lan_url: $('[name="lan-url"]').val()
+             };
 
-                $.ajax({
-                    type: 'get',
-                    url: '{{route('landingUrlField.check')}}',
-                    data: formData,
-                    dataType: 'json',
-                    success: function (data) {
-                        console.log(data)
-                    },
-                    error: function (data) {
-                        console.log(data)
-                    }
-                });
-            }*/
+             $.ajax({
+             type: 'get',
+             url: '{{route('landingUrlField.check')}}',
+             data: formData,
+             dataType: 'json',
+             success: function (data) {
+             console.log(data)
+             },
+             error: function (data) {
+             console.log(data)
+             }
+             });
+             }*/
 
             function url_reg_ajax() {
                 var formData = {
@@ -619,22 +618,24 @@
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
-                        if (data[0].lan_db_types === 'phone') {
-                            $('#lan-db-types').val(2)
-                        } else {
-                            $('#lan-db-types').val(1)
-                        }
-                        $('#db-field-table tbody').html('');
-                        $.each(data, function (key, value) {
-                            var url = 'landingUrlField\/' + value.lan_url;
-                            $('.db-table-copy tr .db-num').text(key + 1);
-                            $('.db-table-copy tr .db-name').text(value.lan_db_title);
-                            $('.db-table-copy tr .db-delete').html('<a class="btn btn-default delete-button" data-id="' + value.id + '">삭제</a>');
+                        if (data.length !== 0) {
+                            if (data[0].lan_db_types === 'phone') {
+                                $('#lan-db-types').val(2)
+                            } else {
+                                $('#lan-db-types').val(1)
+                            }
+                            $('#db-field-table tbody').html('');
+                            $.each(data, function (key, value) {
+                                var url = 'landingUrlField\/' + value.lan_url;
+                                $('.db-table-copy tr .db-num').text(key + 1);
+                                $('.db-table-copy tr .db-name').text(value.lan_db_title);
+                                $('.db-table-copy tr .db-delete').html('<a class="btn btn-default delete-button" data-id="' + value.id + '">삭제</a>');
 
-                            var getForm = $('.db-table-copy .db-table tr');
-                            var copyForm = getForm.clone(true);
-                            $('#db-field-table tbody').append(copyForm)
-                        });
+                                var getForm = $('.db-table-copy .db-table tr');
+                                var copyForm = getForm.clone(true);
+                                $('#db-field-table tbody').append(copyForm)
+                            });
+                        }
                     },
                     error: function (data) {
                         console.log(data)

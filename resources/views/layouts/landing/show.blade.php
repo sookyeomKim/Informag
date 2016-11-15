@@ -19,13 +19,35 @@
             right: 0;
             bottom: 0;
         }
+
+        .image-wrap img {
+            margin: 0 auto;
+        }
+
+        .db-button-wrap {
+            position: fixed;
+            width: 100%;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.5);
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .db-button-wrap button{
+            padding-top: 10px;
+        }
     </style>
+
 </head>
 <body>
 <section class="image-wrap">
     @foreach($landing->images as $image)
-        <img src="{{asset('uploads/images/'.$image->image_name)}}" alt="" class="img-responsive">
+        <img src="{{asset('uploads/images/'.$image->image_name)}}" alt="{{$image->image_name}}" class="img-responsive">
     @endforeach
+    <div class="db-button-wrap text-center">
+        <button id="" class="btn btn-primary">신청하기</button>
+    </div>
 </section>
 
 <div class="modal fade" id="db-reg-modal" tabindex="-1" role="dialog" aria-labelledby="db-reg-modal-label">
@@ -38,7 +60,6 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" role="form">
-                    {{ csrf_field() }}
                     @foreach($landing->db_fields as $key =>$db_field)
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
@@ -58,15 +79,13 @@
         </div>
     </div>
 </div>
+<div id="db-script-wrap">
+
+</div>
 <script src="{{elixir('js/main.js')}}"></script>
 <script>
     $(function () {
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('[name="_token"]').val()
-            }
-        });
 
         hits();
 
@@ -101,7 +120,7 @@
             formData = {
                 lan_id:{{$url_info->lan_id}},
                 db_content: dbObj,
-                db_inflow:'{{$url_info->lan_url}}'
+                db_inflow: '{{$url_info->lan_url}}'
             };
 
             $.ajax({
@@ -110,13 +129,15 @@
                 data: formData,
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data)
+                    alert("성공");
                 },
                 error: function (data) {
-                    console.log(data)
+                    alert("실패");
                 }
             });
         }
+
+        $('#db-script-wrap').parseHTML({{$landing->lan_page_script}});
     });
 </script>
 </body>

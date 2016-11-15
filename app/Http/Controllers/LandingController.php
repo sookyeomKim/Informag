@@ -78,8 +78,10 @@ class LandingController extends Controller
         $files = Input::file('lan_image');
         foreach ($files as $key => $file) {
             $image = \Image::make(Input::file('lan_image')[$key]);
-            $path = public_path() . '/uploads/images/';
-            $image->save($path . $file->getClientOriginalName());
+            /*$filename = date('YmdHis') . "_" . $file->getClientOriginalName();*/
+            $filename = $file->getClientOriginalName();
+            $path = public_path('/uploads/images/'.$filename);
+            $image->save($path);
             $landing = new Image();
             $landing->image_name = $file->getClientOriginalName();
             $landing->lan_id = $landing_id;

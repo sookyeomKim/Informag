@@ -22,7 +22,7 @@
                     <th>시작일</th>
                     <th>종료일</th>
                     <th>진행여부</th>
-                    <th>조회사</th>
+                    <th>조회수</th>
                     <th>DB수</th>
                 </tr>
                 </thead>

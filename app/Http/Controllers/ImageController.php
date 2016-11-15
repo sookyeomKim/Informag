@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Input;
 
 use App\Image;
 use App\Http\Requests;
-use League\Flysystem\File;
 
 class ImageController extends Controller
 {
     public function destroy(Request $request)
     {
-        $path = public_path() . '/uploads/images/';
-        \File::delete($path . $request->image_name);
+        $filenmae = $request->image_name;
+        $path = public_path() . '/uploads/images/' . $filenmae;
+        \File::delete($path);
         $take = Image::destroy($request->image_id);
         return \Response::json($take);
     }
@@ -24,8 +24,10 @@ class ImageController extends Controller
         $files = Input::file('lan_image');
         foreach ($files as $key => $file) {
             $image = \Image::make(Input::file('lan_image')[$key]);
-            $path = public_path() . '/uploads/images/';
-            $image->save($path . $file->getClientOriginalName());
+            /*$filename = date('YmdHis') . "_" . $file->getClientOriginalName();*/
+            $filename = $file->getClientOriginalName();
+            $path = public_path('/uploads/images/' . $filename);
+            $image->save($path);
             $landing = new Image();
             $landing->image_name = $file->getClientOriginalName();
             $landing->lan_id = $request->lan_id;

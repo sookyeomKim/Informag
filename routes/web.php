@@ -6,6 +6,7 @@ Route::get('/', function () {
 });
 
 Route::get('landingUrlField/{url_name}', ['as' => 'landingUrlField.view', 'uses' => 'LandingUrlFieldController@view']);
+Route::post('dbRegister', ['as' => 'DbManageField.store', 'uses' => 'DbManageFieldController@store']);
 
 Route::group(['middleware' => ['auth', 'roles'], 'roles' => ['administrator']], function () {
     /*Route::get('register');*/
@@ -42,7 +43,6 @@ Route::group(['middleware' => ['auth', 'roles'], 'roles' => ['administrator']], 
     });
 
     Route::group(['prefix' => 'DbManageField'], function () {
-        Route::post('', ['as' => 'DbManageField.store', 'uses' => 'DbManageFieldController@store']);
         Route::get('{id}', ['as' => 'DbManageField.show', 'uses' => 'DbManageFieldController@show', 'roles' => ['User']]);
         Route::get('{id}/excel', ['as' => 'DbManageField.excelExport', 'uses' => 'DbManageFieldController@excelExport', 'roles' => ['User']]);
     });
