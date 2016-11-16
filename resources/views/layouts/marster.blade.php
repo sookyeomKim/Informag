@@ -13,32 +13,37 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{elixir('css/main.css')}}">
     <style>
-        /*커스터마이징*/
-
+        /*                       common                      */
         /*modal*/
-        .modal-title{
+        .navbar-brand {
+            padding: 0px;
+            padding-left: 15px;
+            height: 0;
+        }
+
+        .modal-title {
             font-weight: bold;
         }
 
-        .modal-content{
-            padding:30px;
+        .modal-content {
+            padding: 30px;
         }
 
-        .modal-content .form-group{
-            margin-top:15px;
+        .modal-content .form-group {
+            margin-top: 15px;
         }
 
-        .modal-body label{
+        .modal-body label {
             margin: 5px 0;
         }
-        .input-sm{
+
+        .input-sm {
             width: 80%;
             float: right;
         }
 
-
         /*font-color*/
-        .font-orange{
+        .font-orange {
             color: #ff5a00;
             font-weight: bold;
         }
@@ -74,7 +79,7 @@
         }
 
         .center-block {
-            text-align : center;
+            text-align: center;
         }
 
         legend {
@@ -95,10 +100,9 @@
             color: #fff;
         }
 
-        .badge{
-            padding:10px 20px;
+        .badge {
+            padding: 10px 20px;
             margin-bottom: 5px;
-            float:right;
         }
 
         /*헤더*/
@@ -110,9 +114,9 @@
             z-index: 10;
         }
 
-        .navbar-nav{
-            margin-top:  9px;
-            margin-left:15px;
+        .navbar-nav {
+            margin-top: 9px;
+            margin-left: 15px;
         }
 
         .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
@@ -144,7 +148,7 @@
             padding: 10px;
         }
 
-        .navbar-header{
+        .navbar-header {
             padding: 12px;
         }
 
@@ -182,10 +186,12 @@
         }
 
         /*섹션*/
+
         .static-section {
             box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.14),
             0px 2px 9px rgba(0, 0, 0, 0.098),
             0px 5px 6px rgba(0, 0, 0, 0.084);
+            padding: 20px;
         }
 
         .static-section h1 {
@@ -225,24 +231,81 @@
         .static-section .clause-table-wrap table tr td:nth-child(3), .static-section .clause-table-wrap table tr th:nth-child(3) {
             width: 60%;
         }
-        .static-section .clause-wrap div{
+
+        .static-section .clause-wrap div {
             padding: 5px 0;
         }
 
-        .table-responsive th, td{
+        .table-responsive th, td {
             text-align: center;
         }
 
         /*page*/
-        h2{
+        h2 {
             font-size: 25px;
             font-weight: bold;
             margin-top: 30px;
         }
 
-        h3{
+        h3 {
             font-size: 18px;
             margin-top: 29px;
+        }
+
+        /*                    main                  */
+        /*Login*/
+        #Login-container {
+            padding: 10px;
+            margin: 15% 20px;
+            border-top: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+        }
+
+        #Login-box {
+            width: 21%;
+            height: 40%;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        #Login-box h1 {
+            margin-top: -3px;
+        }
+
+        #Login-box span {
+            font-weight: 900;
+            font-size: 16px;
+        }
+
+        #Login-box .form-group {
+            margin: 5px 7px;
+            display: block;
+        }
+
+        .login-id {
+            display: inline-block;
+            margin-left: 16px;
+        }
+
+        #Login-box button {
+            width: 75px;
+            height: 75px;
+            color: #cc6600;
+            font-size: 15px;
+            background-color: black;
+            text-align: center;
+            border-radius: 5px;
+            position: relative;
+            top: -80px;
+            left: 279px;
+        }
+
+        .test p {
+            float: left;
+        }
+
+        .test span {
+            float: right;
         }
 
     </style>
@@ -255,89 +318,61 @@
     </script>
 </head>
 <body>
-<div id="app">
-    <header>
-        <div class="nav-top">권용무님, 반갑습니다. <a>로그아웃</a></div>
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        <img src="{{asset('images/Infomac-logo.jpg')}}" alt="인포맥">
-                    </a>
-                </div>
-
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                            data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">                    &nbsp;
-                        @if(!Auth::guest())
-                            <li><a class="" href="{{route('landing.index')}}">랜딩페이지 관리</a>
-                            </li>
-                            @if(Auth::user()->hasRole(['Administrator']))
-                                <li><a class="" href="{{route('client.index')}}">고객 관리</a></li>
-                            @endif
-                            {{--<li><a href="../../manageAdmin/manageAdmin.html">Admin 관리</a></li>
-                            <li><a href="../dbListpage/dbListPage.html">DB List</a></li>--}}
-                        @endif
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @if (Auth::guest())
-                            <li><a href="{{ url('/login') }}">로그인</a></li>
-                            {{--<li><a href="{{ url('/register') }}">회원가입</a></li>--}}
-                        @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-expanded="false">
-                                    {{ Auth::user()->c_name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ url('/logout') }}"
-                                           onclick="event.preventDefault();
+<header>
+    <div class="nav-top">
+        @if (Auth::user())
+            {{ Auth::user()->c_name }}님, 반갑습니다.
+            <a href="{{ url('/logout') }}"
+               onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
+                로그아웃
+            </a>
 
-                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST"
-                                              style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
+            <form id="logout-form" action="{{ url('/logout') }}" method="POST"
+                  style="display: none;">
+                {{ csrf_field() }}
+            </form>
+        @endif
+    </div>
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <!-- Branding Image -->
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    <img src="{{asset('images/Infomac-logo.jpg')}}" alt="인포맥">
+                </a>
             </div>
-        </nav>
-    </header>
-    <main class="container-fluid">
-        <div class="row">
-            <aside class="col-md-2 static-aside">
-                <dl>
-                    <dt><a class="active">목록</a></dt>
-                    <dt><a href="../addLandingpage/addLandingpage.html">추가</a></dt>
-                </dl>
-            </aside>
+
+            <!-- Collapsed Hamburger -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#app-navbar-collapse">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                <!-- Left Side Of Navbar -->
+                <ul class="nav navbar-nav">                    &nbsp;
+                    @if(!Auth::guest())
+                        <li><a class="active" href="{{route('landing.index')}}">랜딩페이지 관리</a>
+                        </li>
+                        @if(Auth::user()->hasRole(['Administrator']))
+                            <li><a class="" href="{{route('client.index')}}">고객 관리</a></li>
+                            <li><a href="#">Admin 관리</a></li>
+                        @endif
+                    @endif
+                </ul>
+            </div>
         </div>
-        <section class="col-md-10 static-section">
-            @yield('content')
-        </section>
-    </main>
-</div>
+    </nav>
+</header>
+<main class="container-fluid">
+    <div class="row">
+        @yield('content')
+    </div>
+</main>
 <!-- Scripts -->
 <script src="{{elixir('js/main.js')}}"></script>
 @yield('scripts')

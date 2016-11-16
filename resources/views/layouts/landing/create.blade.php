@@ -14,7 +14,7 @@
         <form class="form-horizontal" method="POST" action="{{route('landing.store')}}" accept-charset="UTF-8"
               enctype="multipart/form-data">
             {{ csrf_field() }}
-
+            <input type="hidden" id="client_id" name="client_id">
             <fieldset>
                 <legend>기본정보</legend>
                 <hr>
@@ -123,8 +123,13 @@
                 </div>
             </fieldset>--}}
             <fieldset>
-                <input type="radio" name="lan_mobile_confirm" checked="checked" value="1">
-                <input type="radio" name="lan_mobile_confirm" value="0">
+                <legend>모바일에서만 실행하기</legend>
+                <div class="radio">
+                    <label><input type="radio" name="lan_mobile_confirm" checked="checked" value="1">ON</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="lan_mobile_confirm" value="0">OFF</label>
+                </div>
             </fieldset>
             <hr>
             <div class="submit-button-group">
@@ -222,8 +227,10 @@
 
             function client_select() {
                 $('#client-list-table tbody tr').click(function () {
-                    var c_name_txt = $(this).find('.client-c-name').text();
-                    $("#lan_c_name").val(c_name_txt);
+                    var client_c_name = $(this).find('.client-c-name').text();
+                    var client_num = $(this).find('.client-num').text();
+                    $("#lan_c_name").val(client_c_name);
+                    $("#client_id").val(client_num);
                     $('#c-name-modal').modal('hide')
                 });
             }

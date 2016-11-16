@@ -19,6 +19,10 @@ class CreateLandingsTable extends Migration
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
+            $table->integer('client_id')->unsigned();
+            $table->foreign('client_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
             $table->string('lan_c_name');
             $table->string('lan_m_name');
             $table->date('lan_start_date');

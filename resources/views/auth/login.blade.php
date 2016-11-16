@@ -1,92 +1,49 @@
-@extends('layouts.marster')
-@section('styles')
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{elixir('css/main.css')}}">
     <style>
-        /* main */
-        /*Login*/
-        #Login-container{
-            padding: 10px;
-            margin:15% 20px;
-            border-top: 2px solid #808080;
-            border-bottom: 2px solid #808080;
-        }
-
-        #Login-box{
-            width:21%;
-            height:40%;
-            margin:0 auto;
-            padding:15px;
-        }
-
-        #Login-box h1{
-            margin-top:-3px;
-        }
-
-        #Login-box span{
-            font-weight: 900;
-            font-size:16px;
-        }
-
-        #Login-box .form-group{
-            margin: 5px 7px;
-            display: block;
-        }
-
-        .login-id{
-            display: inline-block;
-            margin-left: 16px;
-        }
-
-        #Login-box button{
-            width:75px;
-            height:75px;
-            color:#cc6600;
-            font-size:15px;
-            background-color: black;
-            text-align:center;
-            border-radius: 5px;
-            position:relative;
-            top:-80px;
-            left:279px;
-        }
-
-        p{
-            margin:-60px 0 10px;
-        }
-
-        .test p{
-            float: left;
-        }
-        .test span{
-            float: right;
-        }
-
-        /* common */
-        /*커스터마이징*/
-
+        /*                       common                      */
         /*modal*/
-        .modal-title{
+        .navbar-brand {
+            padding: 0px;
+            padding-left: 15px;
+            height: 0;
+        }
+
+        .modal-title {
             font-weight: bold;
         }
 
-        .modal-content{
-            padding:30px;
+        .modal-content {
+            padding: 30px;
         }
 
-        .modal-content .form-group{
-            margin-top:15px;
+        .modal-content .form-group {
+            margin-top: 15px;
         }
 
-        .modal-body label{
+        .modal-body label {
             margin: 5px 0;
         }
-        .input-sm{
+
+        .input-sm {
             width: 80%;
             float: right;
         }
 
-
         /*font-color*/
-        .font-orange{
+        .font-orange {
             color: #ff5a00;
             font-weight: bold;
         }
@@ -122,7 +79,7 @@
         }
 
         .center-block {
-            text-align : center;
+            text-align: center;
         }
 
         legend {
@@ -143,10 +100,9 @@
             color: #fff;
         }
 
-        .badge{
-            padding:10px 20px;
+        .badge {
+            padding: 10px 20px;
             margin-bottom: 5px;
-            float:right;
         }
 
         /*헤더*/
@@ -158,9 +114,9 @@
             z-index: 10;
         }
 
-        .navbar-nav{
-            margin-top:  9px;
-            margin-left:15px;
+        .navbar-nav {
+            margin-top: 9px;
+            margin-left: 15px;
         }
 
         .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
@@ -192,7 +148,7 @@
             padding: 10px;
         }
 
-        .navbar-header{
+        .navbar-header {
             padding: 12px;
         }
 
@@ -230,10 +186,12 @@
         }
 
         /*섹션*/
+
         .static-section {
             box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.14),
             0px 2px 9px rgba(0, 0, 0, 0.098),
             0px 5px 6px rgba(0, 0, 0, 0.084);
+            padding: 20px;
         }
 
         .static-section h1 {
@@ -273,69 +231,176 @@
         .static-section .clause-table-wrap table tr td:nth-child(3), .static-section .clause-table-wrap table tr th:nth-child(3) {
             width: 60%;
         }
-        .static-section .clause-wrap div{
+
+        .static-section .clause-wrap div {
             padding: 5px 0;
         }
 
-        .table-responsive th, td{
+        .table-responsive th, td {
             text-align: center;
         }
 
         /*page*/
-        h2{
+        h2 {
             font-size: 25px;
             font-weight: bold;
             margin-top: 30px;
         }
 
-        h3{
+        h3 {
             font-size: 18px;
             margin-top: 29px;
         }
 
-    </style>
-@endsection
-@section('content')
-    <form  id="Login-container"  class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-        <div id="Login-box">
-            {{ csrf_field() }}
-            <h1><img src="{{asset('images/Login-logo.jpg')}}" alt="로그인 로고"></h1>
-            <div class="form-group{{ $errors->has('c_id') ? ' has-error' : '' }}">
-                <label for="c_id" class="col-md-2 control-label login-id">아이디</label>
-                <div class="col-md-8">
-                    <input id="c_id" type="text" class="form-control" name="c_id" value="{{ old('c_id') }}" required autofocus>
-                    @if ($errors->has('c_id'))
-                        <span class="help-block">
-                        <strong>{{ $errors->first('c_id') }}</strong>
-                    </span>
-                    @endif
-                </div>
-            </div>
+        /*                    main                  */
+        /*Login*/
+        #Login-container {
+            padding: 10px;
+            margin: 15% 20px;
+            border-top: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+        }
 
-            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                <label for="password" class="col-md-2 control-label">패스워드</label>
-                <div class="col-md-8">
-                    <input id="password" type="password" class="form-control" name="password" required>
-                    @if ($errors->has('password'))
-                        <span class="help-block">
-                    <strong>{{ $errors->first('password') }}</strong>
+        #Login-box {
+            width: 21%;
+            height: 40%;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        #Login-box h1 {
+            margin-top: -3px;
+        }
+
+        #Login-box span {
+            font-weight: 900;
+            font-size: 16px;
+        }
+
+        #Login-box .form-group {
+            margin: 5px 7px;
+            display: block;
+        }
+
+        .login-id {
+            display: inline-block;
+            margin-left: 16px;
+        }
+
+        #Login-box button {
+            width: 75px;
+            height: 75px;
+            color: #cc6600;
+            font-size: 15px;
+            background-color: black;
+            text-align: center;
+            border-radius: 5px;
+            position: relative;
+            top: -80px;
+            left: 279px;
+        }
+
+        .test p {
+            float: left;
+        }
+
+        .test span {
+            float: right;
+        }
+
+        .login-wrap {
+            margin: 300px 0;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+        }
+
+        .login-inner-wrap {
+            width: 361px;
+            margin: 0 auto;
+        }
+
+        .login-inner-wrap h1 img {
+            padding: 10px;
+        }
+
+        .login-inner-wrap .col-sm-9, .login-inner-wrap .col-sm-3 {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+        .login-inner-wrap .first-row{
+            margin-right: -8px;
+            margin-left: -8px;
+        }
+
+        .login-inner-wrap .second-row{
+            padding: 10px;
+            margin: 0 auto;
+        }
+
+        .login-inner-wrap .control-label {
+            padding-right: 0px;
+        }
+
+        .login-submit-button {
+            padding: 30px 20px;
+            color: #ff5a00;
+            background-color: #000;
+        }
+    </style>
+    <!-- Scripts -->
+    <script>
+        window.Laravel = <?php echo json_encode([
+                'csrfToken' => csrf_token(),
+        ]); ?>
+    </script>
+</head>
+<body>
+<div class="login-wrap">
+    <div class="login-inner-wrap">
+        <h1><img src="{{asset('images/Login-logo.jpg')}}" alt="로그인 로고"></h1>
+        <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+            <div class="row first-row">
+                <div class="col-sm-9">
+                    {{ csrf_field() }}
+                    <div class="form-group{{ $errors->has('c_id') ? ' has-error' : '' }}">
+                        <label for="c_id" class="col-sm-3 control-label">아이디</label>
+                        <div class="col-sm-9">
+                            <input id="c_id" type="text" class="form-control" name="c_id" value="{{ old('c_id') }}"
+                                   required
+                                   autofocus>
+                            @if ($errors->has('c_id'))
+                                <span class="help-block">
+                    <strong>{{ $errors->first('c_id') }}</strong>
                 </span>
-                    @endif
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-9 col-md-offset-4">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="remember"> 비밀번호 기억하기
-                        </label>
+                            @endif
+                        </div>
                     </div>
-                    <a class="btn btn-link" href="{{ url('/password/reset') }}">
-                        비밀번호를 잊어버리셨나요?
-                    </a>
+                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <label for="password" class="col-sm-3 control-label">패스워드</label>
+                        <div class="col-sm-9">
+                            <input id="password" type="password" class="form-control" name="password" required>
+                            @if ($errors->has('password'))
+                                <span class="help-block">
+                            <strong>{{ $errors->first('password') }}</strong>
+                        </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <button type="submit" class="btn btn-default login-submit-button">LOGIN</button>
                 </div>
             </div>
-            <button type="submit" class="btn btn-default">LOGIN</button>
-            <p id="warning-msg"><img src="images/warning-msg.jpg"></p>
-    </form>
-@endsection
+            <div class="row second-row">
+                <img src="images/warning-msg.jpg">
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Scripts -->
+<script src="{{elixir('js/main.js')}}"></script>
+</body>
+</html>
+
+

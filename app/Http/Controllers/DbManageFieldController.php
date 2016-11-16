@@ -24,13 +24,14 @@ class DbManageFieldController extends Controller
         $lan_info = Landing::findOrFail($id);
         $dmf_info = $lan_info->db_manage_fields;
         $url_info = $lan_info->url_fields;
+
         if ($request->db_search_text) {
             $db_list = $lan_info->db_manage_fields()->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])
-                ->where('db_content->' . $request->db_title_select, '=', $request->db_search_text)->orderBy('id', 'desc')->paginate(5);
+                ->where('db_content->' . $request->db_title_select, '=', $request->db_search_text)->orderBy('id', 'desc')->paginate(20);
         } elseif ($request->db_start_date && !$request->db_search_text) {
-            $db_list = $lan_info->db_manage_fields()->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])->orderBy('id', 'desc')->paginate(5);
+            $db_list = $lan_info->db_manage_fields()->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])->orderBy('id', 'desc')->paginate(20);
         } else {
-            $db_list = $lan_info->db_manage_fields()->orderBy('id', 'desc')->paginate(5);
+            $db_list = $lan_info->db_manage_fields()->orderBy('id', 'desc')->paginate(20);
         }
 
         $db_info = $lan_info->db_fields;

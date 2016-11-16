@@ -63,6 +63,7 @@ class LandingController extends Controller
     {
         $landing = new Landing();
         $landing->user_id = \Auth::user()->id;
+        $landing->client_id = $request->input('client_id');
         $landing->lan_c_name = $request->input('lan_c_name');
         $landing->lan_m_name = $request->input('lan_m_name');
         $landing->lan_start_date = $request->input('lan_start_date');
@@ -72,6 +73,7 @@ class LandingController extends Controller
         $landing->lan_phone = $request->input('lan_phone');
         $landing->lan_page_script = $request->input('lan_page_script');
         $landing->lan_db_script = $request->input('lan_db_script');
+        $landing->lan_mobile_confirm = (int)$request->input('lan_mobile_confirm');
         $landing->save();
         $landing_id = $landing->id;
 
@@ -80,7 +82,7 @@ class LandingController extends Controller
             $image = \Image::make(Input::file('lan_image')[$key]);
             /*$filename = date('YmdHis') . "_" . $file->getClientOriginalName();*/
             $filename = $file->getClientOriginalName();
-            $path = public_path('/uploads/images/'.$filename);
+            $path = public_path('/uploads/images/' . $filename);
             $image->save($path);
             $landing = new Image();
             $landing->image_name = $file->getClientOriginalName();

@@ -5,8 +5,8 @@
 @section('content')
     <aside class="col-md-2 static-aside">
         <dl>
-            <dt><a href="{{route('landing.index')}}" class="btn btn-default">목록</a></dt>
-            <dt><a href="{{route('landing.create')}}" class="btn btn-default">추가</a></dt>
+            <dt><a href="{{route('landing.index')}}">목록</a></dt>
+            <dt><a class="active" href="{{route('landing.create')}}">추가</a></dt>
         </dl>
     </aside>
     <section class="col-md-10 static-section">
@@ -19,6 +19,7 @@
               enctype="multipart/form-data">
             {{ csrf_field() }}
             <input name="_method" type="hidden" value="PUT">
+            <input type="hidden" id="client_id" name="client_id" value="{{$landing->client_id}}">
             <fieldset>
                 <legend>기본정보</legend>
                 <hr>
@@ -91,8 +92,7 @@
                             앞, 뒤에 &#60;script&#62;&#44;&nbsp;&#60;&#47;script&#62;라는 문구가 없을 경우 추가해주세요.</p>
                     </div>
                     <div class="col-sm-12">
-                        <textarea id="lan_page_script" name="lan_page_script" class="form-control"
-                                  value="{{$landing->lan_page_script}}"></textarea>
+                        <textarea id="lan_page_script" name="lan_page_script" class="form-control" rows="20">{{$landing->lan_page_script}}</textarea>
                     </div>
                 </div>
             </fieldset>
@@ -106,8 +106,7 @@
                             앞, 뒤에 &#60;script&#62;&#44;&nbsp;&#60;&#47;script&#62;라는 문구가 없을 경우 추가해주세요.</p>
                     </div>
                     <div class="col-sm-12">
-                        <textarea id="lan_db_script" name="lan_db_script" class="form-control"
-                                  value="{{$landing->lan_db_script}}"></textarea>
+                        <textarea id="lan_db_script" name="lan_db_script" class="form-control" rows="20">{{$landing->lan_db_script}}</textarea>
                     </div>
                 </div>
             </fieldset>
@@ -131,17 +130,19 @@
                 </div>
             </fieldset>--}}
             <fieldset>
-                <label for="lan-mobile-confirm-true">true</label>
-                <input type="radio" id="lan-mobile-confirm-true" name="lan-mobile-confirm" value="1"
-                @if($landing->lan_mobile_confirm == 1)
-                    {{'checked="checked"'}}
-                        @endif>
-                <label for="lan-mobile-confirm_false">false</label>
-                <input type="radio" name="lan-mobile-confirm"
-                       value="0"
-                @if($landing->lan_mobile_confirm == 0)
-                    {{'checked="checked"'}}
-                        @endif>
+                <legend>모바일에서만 실행하기</legend>
+                <div class="radio">
+                    <label><input type="radio" name="lan_mobile_confirm" checked="checked" value="1"
+                        @if($landing->lan_mobile_confirm == 1)
+                            {{'checked="checked"'}}
+                                @endif>ON</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="lan_mobile_confirm" value="0"
+                        @if($landing->lan_mobile_confirm == 0)
+                            {{'checked="checked"'}}
+                                @endif>OFF</label>
+                </div>
             </fieldset>
             <hr>
             <div class="submit-button-group">
@@ -398,6 +399,7 @@
                         @foreach($landing->images as $image)
                     {
                         caption: "{{$image->image_name}}",
+                        size: 827000,
                         width: "120px",
                         url: "{{route('image.destroy',$image->id)}}",
                         key:{{$image->id}},
@@ -476,8 +478,10 @@
 
             function client_select() {
                 $('#client-list-table tbody tr').click(function () {
-                    var c_name_txt = $(this).find('.client-c-name').text();
-                    $("#lan_c_name").val(c_name_txt);
+                    var client_c_name = $(this).find('.client-c-name').text();
+                    var client_num = $(this).find('.client-num').text();
+                    $("#lan_c_name").val(client_c_name);
+                    $("#user_id").val(client_num);
                     $('#c-name-modal').modal('hide')
                 });
             }
@@ -618,7 +622,7 @@
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
-                        if (data.length !== 0) {
+                        if (data.length != 0) {
                             if (data[0].lan_db_types === 'phone') {
                                 $('#lan-db-types').val(2)
                             } else {

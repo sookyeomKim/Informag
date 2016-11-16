@@ -5,6 +5,10 @@ Route::get('/', function () {
     return redirect()->route('landing.index');
 });
 
+Route::get('warning', function () {
+    return view('layouts.error.warning');
+});
+
 Route::get('landingUrlField/{url_name}', ['as' => 'landingUrlField.view', 'uses' => 'LandingUrlFieldController@view']);
 Route::post('dbRegister', ['as' => 'DbManageField.store', 'uses' => 'DbManageFieldController@store']);
 

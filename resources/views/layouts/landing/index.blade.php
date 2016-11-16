@@ -1,17 +1,58 @@
 @extends('layouts.marster')
 @section('content')
-    <aside class="col-md-2">
+    <aside class="col-md-2 static-aside">
         <dl>
             @if($roleCheck)
-                <dt><a class="btn btn-default" href="{{url('landing/create')}}">추가</a></dt>
+                <dt><a class="active">목록</a></dt>
+                <dt><a href="{{url('landing/create')}}">추가</a></dt>
             @endif
         </dl>
     </aside>
     <section class="col-md-10">
+        <h2>랜딩 페이지 목록</h2>
         <div>
-            <h1>랜딩 페이지 목록</h1>
-        </div>
-        <div class="table-responsive">
+            <p>수정하려면 제목을, 수집된 DB를 확인하려면 DB수 항목을 클릭하세요</p>
+            <!-- 검색 -->
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <form class="navbar-form">
+                            <div class="form-inline">
+                                <input type="date" name="startDt" class="form-control" max="1979-12-31"> -
+                                <input type="date" name="endDt" class="form-control" min="2000-01-02">
+                                <button type="submit" class="btn btn-default">조회</button>
+                                <select class="form-control">
+                                    <option>업체명</option>
+                                    <option>제목</option>
+                                    <option>담당자</option>
+                                </select>
+                                <input type="text" class="form-control" placeholder="Search">
+                                <button type="submit" class="btn btn-default">검색</button>
+                                <select class="form-control">
+                                    <option>10개씩 보기</option>
+                                    <option>20개씩 보기</option>
+                                    <option>30개씩 보기</option>
+                                </select>
+                                <p class="badge text-right">총 221개</p>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- /.navbar-collapse -->
+            </nav>
+
+            <div class="tablebox">
+            <div class="table-responsive">
             <table class="table">
                 <thead>
                 <tr>
@@ -56,12 +97,9 @@
                 </tbody>
             </table>
         </div>
+            </div>
         <div class="text-center">
             {{$landings->links()}}
         </div>
     </section>
 @endsection
-
-{{--
-<a href="javascript:window.open({{'"'.route('landing.show',$landing->title).'"'}},{{'"'.$landing->title.'"'}},'width=768','top=0')"
-   target="_blank">{{route('landing.show',$landing->title)}}</a>--}}

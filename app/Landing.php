@@ -35,6 +35,6 @@ class Landing extends Model
 
     public function terms_fields()
     {
-        return $this->hasMany('App\LandingUrlField', 'lan_id');
+        return $this->hasMany('App\LandingTermsField', 'lan_id');
     }
 }

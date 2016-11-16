@@ -1,15 +1,12 @@
 @extends('layouts.marster')
-
 @section('content')
-    <aside class="col-md-2">
+    <aside class="col-md-2 static-aside">
         <dl>
-            <dt><a class="btn btn-default" data-toggle="modal" data-target="#clientRegModal">추가</a></dt>
+            <dt><a class="active">업체 목록</a></dt>
         </dl>
     </aside>
-    <section class="col-md-10">
-        <div>
-            <h1>고객 목록</h1>
-        </div>
+    <section class="col-md-10 static-section">
+        <h2>업체 리스트</h2>
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -52,6 +49,7 @@
         <div class="text-center">
             {{$clients->links()}}
         </div>
+        <button class="btn btn-lc3" data-toggle="modal" data-target="#clientRegModal">신규업체등록</button>
     </section>
 
     <div class="modal fade" id="clientRegModal" tabindex="-1" role="dialog" aria-labelledby="clientRegModalLabel">
@@ -180,7 +178,7 @@
                     }
                 });
             }
-            
+
             function client_reg_ajax() {
                 var formData = {
                     c_name: $('#c_name').val(),
@@ -215,3 +213,5 @@
         });
     </script>
 @endsection
+
+
