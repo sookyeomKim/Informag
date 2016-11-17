@@ -199,7 +199,6 @@
                         window.location.href = "/client";
                     },
                     error: function (data) {
-                        console.log(data);
                         if (data.status === 422) {
                             $.each(JSON.parse(data.responseText), function (key, value) {
                                 $("#" + key).parents('.form-group').addClass('has-error').find('.error-text').text(value).css({

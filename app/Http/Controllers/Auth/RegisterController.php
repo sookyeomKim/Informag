@@ -58,8 +58,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        /*$convertPhone = FormatPhoneHelper($data['phone']);*/
-
         return User::create([
             'c_name' => $data['c_name'],
             'm_name' => $data['m_name'],

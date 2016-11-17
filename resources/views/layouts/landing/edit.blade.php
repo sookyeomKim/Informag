@@ -10,8 +10,7 @@
         </dl>
     </aside>
     <section class="col-md-10 static-section">
-        <h1>게시글 수정</h1>
-        <hr>
+        <h2>게시글 수정</h2>
         <form class="form-horizontal"
               method="post"
               action="{{route('landing.update',$landing->id)}}"

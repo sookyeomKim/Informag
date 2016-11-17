@@ -356,12 +356,12 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">                    &nbsp;
                     @if(!Auth::guest())
-                        <li><a class="active" href="{{route('landing.index')}}">랜딩페이지 관리</a>
-                        </li>
+                        <li><a class="active" href="{{route('landing.index')}}">랜딩페이지 관리</a></li>
                         @if(Auth::user()->hasRole(['Administrator']))
                             <li><a class="" href="{{route('client.index')}}">고객 관리</a></li>
                             <li><a href="#">Admin 관리</a></li>
                         @endif
+                        <li><a href="{{route('profile')}}">계정 정보 관리</a></li>
                     @endif
                 </ul>
             </div>

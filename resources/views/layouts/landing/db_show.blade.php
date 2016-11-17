@@ -147,16 +147,3 @@
         });
     </script>
 @endsection
-
-{{--
-@foreach($db_list as $item)
-    <tr>
-        @foreach($item->db_content as $value)
-            @foreach($value as $val)
-                <td>{{$val}}</td>
-            @endforeach
-        @endforeach
-        <td>{{$item->created_at}}</td>
-        <td>{{$item->db_inflow}}</td>
-    </tr>
-@endforeach--}}

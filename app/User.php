@@ -44,6 +44,16 @@ class User extends Authenticatable
         'password' => 'required|min:6|confirmed',
     );
 
+    public static $updateRules = array(
+        'c_name' => 'required|max:60',
+        'm_name' => 'required|max:60',
+        'm_email' => 'required|max:60|email',
+        'c_id' => 'required|max:60',
+        /*'phone' => ['required', 'regex:/^(010|011|016|017|018|019)-\d{3,4}-\d{4}$/', 'max:13', 'unique:users'],*/
+        'phone' => ['required', 'regex:/^(010|011|016|017|018|019)\d{3,4}\d{4}$/', 'max:11'],
+        'password' => 'required|min:6|confirmed',
+    );
+
     public function role()
     {
         return $this->hasOne('App\Role', 'id', 'role_id');

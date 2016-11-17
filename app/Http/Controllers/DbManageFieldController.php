@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Landing;
 use App\DbManageField;
+use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DbManageFieldController extends Controller
@@ -24,6 +25,8 @@ class DbManageFieldController extends Controller
         $lan_info = Landing::findOrFail($id);
         $dmf_info = $lan_info->db_manage_fields;
         $url_info = $lan_info->url_fields;
+        Input::merge(array('db_start_date' => $request->db_start_date . ' 00:00:00'));
+        Input::merge(array('db_end_date' => $request->db_end_date . ' 23:59:59'));
 
         if ($request->db_search_text) {
             $db_list = $lan_info->db_manage_fields()->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])
@@ -41,6 +44,9 @@ class DbManageFieldController extends Controller
     public function excelExport($id, Request $request)
     {
         $lan_info = Landing::findOrFail($id);
+        Input::merge(array('db_start_date' => $request->db_start_date . ' 00:00:00'));
+        Input::merge(array('db_end_date' => $request->db_end_date . ' 23:59:59'));
+
         if ($request->db_search_text) {
             $db_list = $lan_info->db_manage_fields()->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])
                 ->where('db_content->' . $request->db_title_select, '=', $request->db_search_text)->orderBy('id', 'desc')->get();
