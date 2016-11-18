@@ -139,11 +139,19 @@
 @section('scripts')
     <script src="{{elixir('js/db-show.js')}}"></script>
     <script>
-        $('.input-daterange').datepicker({
-            todayBtn: "linked",
-            language: "ko",
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
+        (function ($) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('[name="_token"]').val()
+                }
+            });
+
+            $('.input-daterange').datepicker({
+                todayBtn: "linked",
+                language: "ko",
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+        })(jQuery);
     </script>
 @endsection

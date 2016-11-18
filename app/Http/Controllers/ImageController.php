@@ -13,7 +13,7 @@ class ImageController extends Controller
     public function destroy(Request $request)
     {
         $filenmae = $request->image_name;
-        $path = public_path() . '/uploads/images/' . $filenmae;
+        $path = public_path() . 'uploads/images/' . $filenmae;
         \File::delete($path);
         $take = Image::destroy($request->image_id);
         return \Response::json($take);
@@ -26,7 +26,7 @@ class ImageController extends Controller
             $image = \Image::make(Input::file('lan_image')[$key]);
             /*$filename = date('YmdHis') . "_" . $file->getClientOriginalName();*/
             $filename = $file->getClientOriginalName();
-            $path = public_path('/uploads/images/' . $filename);
+            $path = public_path('uploads/images/' . $filename);
             $image->save($path);
             $landing = new Image();
             $landing->image_name = $file->getClientOriginalName();
