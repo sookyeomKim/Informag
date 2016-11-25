@@ -136,42 +136,52 @@
             function hits() {
                 $.ajax({
                     type: 'get',
-                    url: '{{route('landingUrlField.hits',$url_info->lan_id)}}'
+                    url: '{{route('landingUrlField.hits',$url_info->id)}}'
                 });
             }
 
             function db_reg_ajax() {
-                var dbObj = {};
-                var formData = {};
-                $(".db-input").each(function (index) {
-                    dbObj[$(this).attr('data-db-title')] = $(this).val();
+                var dbCheck = true;
+                $('.db-input').each(function () {
+                    if ($(this).val() === '') {
+                        alert("모든 내용을 입력해주세요.");
+                        dbCheck = false;
+                    }
                 });
 
-                formData = {
-                    lan_id:{{$url_info->lan_id}},
-                    db_content: dbObj,
-                    db_inflow: '{{$url_info->lan_url}}'
-                };
+                if (dbCheck) {
+                    var dbObj = {};
+                    var formData = {};
+                    $(".db-input").each(function (index) {
+                        dbObj[$(this).attr('data-db-title')] = $(this).val();
+                    });
 
-                $.ajax({
-                    type: 'post',
-                    url: '{{route('DbManageField.store')}}',
-                    data: formData,
-                    dataType: 'json',
-                    success: function (data) {
-                        $('<iframe id="db_script_iframe"/>').appendTo('body');
-                        alert('신청이 완료되었습니다.');
-                        $('#db_script_iframe').contents().find('head').append(db_script_text);
-                        $('#db_script_iframe').attr('src', $('#db_script_iframe').attr('src'));
-                        $("#db-reg-modal").modal('hide');
-                        $('.db-input').each(function () {
-                            $(this).val('');
-                        });
-                    },
-                    error: function (data) {
-                        alert('일시적인 오류로 신청이 안 되었습니다.');
-                    }
-                })
+                    formData = {
+                        lan_id:{{$url_info->lan_id}},
+                        db_content: dbObj,
+                        db_inflow: '{{$url_info->lan_url}}'
+                    };
+
+                    $.ajax({
+                        type: 'post',
+                        url: '{{route('DbManageField.store')}}',
+                        data: formData,
+                        dataType: 'json',
+                        success: function (data) {
+                            $('<iframe id="db_script_iframe"/>').appendTo('body');
+                            alert('신청이 완료되었습니다.');
+                            $('#db_script_iframe').contents().find('head').append(db_script_text);
+                            $('#db_script_iframe').attr('src', $('#db_script_iframe').attr('src'));
+                            $("#db-reg-modal").modal('hide');
+                            $('.db-input').each(function () {
+                                $(this).val('');
+                            });
+                        },
+                        error: function (data) {
+                            alert('일시적인 오류로 신청이 안 되었습니다.');
+                        }
+                    })
+                }
             }
         }
     });

@@ -1,4 +1,5 @@
 @extends('layouts.marster')
+@section('pageTitle', 'DbList')
 @section('styles')
     <link rel="stylesheet" href="{{elixir('css/db-show.css')}}">
 @endsection
@@ -38,7 +39,11 @@
                         <td>{{$lan_info->lan_m_name}}</td>
                         <td>{{$lan_info->lan_start_date}}</td>
                         <td>{{$lan_info->lan_end_date}}</td>
-                        <td></td>
+                        <td><?$count = 0;?>
+                            @foreach($lan_info->url_fields as $url_field)
+                                <?$count += $url_field->hits?>
+                            @endforeach
+                            <? echo $count?></td>
                         <td>{{$lan_info->db_manage_fields->count()}}</td>
                     </tr>
                     </tbody>
@@ -59,7 +64,7 @@
                     <tbody>
                     @foreach($url_info as $info)
                         <tr>
-                            <td>{{$info->id}}</td>
+                            <td>{{$info->created_at}}</td>
                             <td>{{$info->lan_url}}</td>
                             <td>{{$info->hits}}</td>
                         </tr>
@@ -69,7 +74,9 @@
             </div>
         </section>
         <section class="well">
-            <form class="form-horizontal" method="get" action="{{route('DbManageField.show',$lan_info->id)}}">
+            <form id="search-form" class="form-horizontal" method="get"
+                  action="{{route('DbManageField.show',$lan_info->id)}}">
+                {{ csrf_field() }}
                 <div class="form-group">
                     <div class="input-daterange">
                         <div class="col-sm-2">
@@ -97,12 +104,11 @@
                         <button type="submit" class="btn btn-default">검색</button>
                     </div>
                     <div class="col-sm-2">
-                        <a href="{{route('DbManageField.excelExport',$lan_info->id)}}" class="btn btn-default">엑셀저장</a>
+                        <a id="excel-export-button" class="btn btn-default">엑셀저장</a>
                     </div>
                 </div>
             </form>
         </section>
-        {{--{{$test}}--}}
         <section class="well">
             <h2>DB리스트</h2>
             <div class="table-responsive">
@@ -152,6 +158,11 @@
                 format: 'yyyy-mm-dd',
                 autoclose: true
             });
+
+            $('#excel-export-button').click(function () {
+                $('#search-form').get(0).setAttribute('action', '{{route('DbManageField.excelExport',$lan_info->id)}}');
+                $('#search-form').submit();
+            })
         })(jQuery);
     </script>
 @endsection

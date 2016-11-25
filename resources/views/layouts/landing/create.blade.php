@@ -1,4 +1,5 @@
 @extends('layouts.marster')
+@section('pageTitle', 'LandingReg')
 @section('styles')
     <link rel="stylesheet" href="{{elixir('css/landing-create.css')}}">
 @endsection

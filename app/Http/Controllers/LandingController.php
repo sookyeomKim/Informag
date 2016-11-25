@@ -14,9 +14,15 @@ class LandingController extends Controller
 {
     public function index()
     {
-        $roleCheck = \Auth::user()->hasRole(['Administrator']);
+        $roleCheck = \Auth::user()->hasRole(['Administrator','Manager']);
+        $userCheck = \Auth::user()->hasRole(['User']);
 
-        $landings = Landing::paginate(20);
+        if ($userCheck) {
+            $landings = Landing::where('client_id', '=', \Auth::user()->id)->paginate(20);
+        } else {
+            $landings = Landing::paginate(20);
+        }
+
         return view('layouts.landing.index', compact('landings', 'roleCheck'));
     }
 

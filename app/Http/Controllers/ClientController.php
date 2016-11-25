@@ -15,13 +15,20 @@ class ClientController extends Controller
 
     public function index()
     {
-        $clients = User::whereRaw('role_id = ?', 5)->orderBy('id', 'desc')->paginate(2);
+        $clients = User::whereRaw('role_id = ?', 5)->orderBy('id', 'desc')->paginate(10);
 
         if (\Request::ajax()) {
             return \Response::json($clients);
         }
 
         return view('layouts.client.index', compact('clients'));
+    }
+
+    public function show($id)
+    {
+        $task = User::findOrFail($id);
+
+        return \Response::json($task);
     }
 
     public function register(Request $request)
@@ -55,6 +62,10 @@ class ClientController extends Controller
             'password' => bcrypt($request->password)
         ]);
 
-        return \Response::json($task);
+        if (\Request::ajax()) {
+            return \Response::json($task);
+        }
+        $clients = User::whereRaw('role_id = ?', 5)->orderBy('id', 'desc')->paginate(10);
+        return view('layouts.client.index', compact('clients'));
     }
 }

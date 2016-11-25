@@ -1,10 +1,11 @@
 @extends('layouts.marster')
+@section('pageTitle', 'LandingList')
 @section('styles')
     <style>
-    .search-box{
-        margin: 0 auto;
-        width: 65%;
-    }
+        .search-box {
+            margin: 0 auto;
+            width: 65%;
+        }
     </style>
 @endsection
 @section('content')
@@ -67,9 +68,9 @@
                         <th>업체명</th>
                         <th>제목</th>
                         <th>담당자</th>
-                        <th>시작일</th>
+                        {{--<th>시작일</th>
                         <th>종료일</th>
-                        <th>진행여부</th>
+                        <th>진행여부</th>--}}
                         <th>조회수</th>
                         <th>DB수</th>
                     </tr>
@@ -87,14 +88,20 @@
                                     <a href="{{route('DbManageField.show',$landing->id)}}">{{$landing->lan_title}}</a>
                                 </td>
                             @endif
-                            <td>{{$landing->lan_m_name}}</td>
-                            <td>{{$landing->lan_start_date}}</td>
+                            <td>{{$landing->user->m_name}}</td>
+                            {{--<td>{{$landing->lan_start_date}}</td>
                             <td>{{$landing->lan_end_date}}</td>
                             <td>
                                 <button type="button" class="btn btn-default">진행 중</button>
                                 <button type="button" class="btn btn-default">종료</button>
+                            </td>--}}
+                            <td>
+                                <?$count = 0;?>
+                                @foreach($landing->url_fields as $url_field)
+                                    <?$count += $url_field->hits?>
+                                @endforeach
+                                <? echo $count?>
                             </td>
-                            <td></td>
                             @if($roleCheck)
                                 <td>
                                     <a href="{{route('DbManageField.show',$landing->id)}}">{{$landing->db_manage_fields->count()}}</a>

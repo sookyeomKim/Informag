@@ -13,12 +13,16 @@ Route::get('landingUrlField/{url_name}', ['as' => 'landingUrlField.view', 'uses'
 Route::post('dbRegister', ['as' => 'DbManageField.store', 'uses' => 'DbManageFieldController@store']);
 
 Route::group(['middleware' => ['auth', 'roles'], 'roles' => ['administrator']], function () {
+    Route::group(['prefix' => 'admin'], function () {
+        Route::post('register', ['as' => 'admin.register', 'uses' => 'AdminController@register']);
+        Route::get('', ['as' => 'admin.index', 'uses' => 'AdminController@index']);
+    });
+
     Route::group(['middleware' => ['roles'], 'roles' => ['Manager']], function () {
         Route::group(['middleware' => ['roles'], 'roles' => ['User']], function () {
             Route::get('profile', ['as' => 'profile', function () {
                 return view('layouts.profile.index');
             }]);
-            Route::put('profile/{id}', ['as' => 'client.update', 'uses' => 'ClientController@update']);
         });
 
         Route::post('image', ['as' => 'image.store', 'uses' => 'ImageController@store']);
@@ -34,6 +38,8 @@ Route::group(['middleware' => ['auth', 'roles'], 'roles' => ['administrator']], 
 
         Route::group(['prefix' => 'client'], function () {
             Route::post('register', ['as' => 'client.register', 'uses' => 'ClientController@register']);
+            Route::put('{id}', ['as' => 'client.update', 'uses' => 'ClientController@update']);
+            Route::get('{id}', ['as' => 'client.show', 'uses' => 'ClientController@show']);
             Route::get('', ['as' => 'client.index', 'uses' => 'ClientController@index']);
         });
 

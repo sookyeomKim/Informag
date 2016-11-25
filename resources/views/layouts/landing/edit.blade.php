@@ -1,4 +1,5 @@
 @extends('layouts.marster')
+@section('pageTitle', 'LandingEdit')
 @section('styles')
     <link rel="stylesheet" href="{{elixir('css/landing-create.css')}}">
 @endsection
@@ -91,7 +92,8 @@
                             앞, 뒤에 &#60;script&#62;&#44;&nbsp;&#60;&#47;script&#62;라는 문구가 없을 경우 추가해주세요.</p>
                     </div>
                     <div class="col-sm-12">
-                        <textarea id="lan_page_script" name="lan_page_script" class="form-control" rows="20">{{$landing->lan_page_script}}</textarea>
+                        <textarea id="lan_page_script" name="lan_page_script" class="form-control"
+                                  rows="20">{{$landing->lan_page_script}}</textarea>
                     </div>
                 </div>
             </fieldset>
@@ -105,7 +107,8 @@
                             앞, 뒤에 &#60;script&#62;&#44;&nbsp;&#60;&#47;script&#62;라는 문구가 없을 경우 추가해주세요.</p>
                     </div>
                     <div class="col-sm-12">
-                        <textarea id="lan_db_script" name="lan_db_script" class="form-control" rows="20">{{$landing->lan_db_script}}</textarea>
+                        <textarea id="lan_db_script" name="lan_db_script" class="form-control"
+                                  rows="20">{{$landing->lan_db_script}}</textarea>
                     </div>
                 </div>
             </fieldset>
@@ -177,11 +180,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="url-table-wrap col-sm-offset-1">
+                    <div class="url-table-wrap col-sm-offset-1 table-responsive">
                         <table id="url-field-table" class="table">
                             <thead>
                             <tr>
                                 <th>No.</th>
+                                <th>미리보기</th>
                                 <th>URL</th>
                                 <th></th>
                             </tr>
@@ -198,6 +202,7 @@
                 <table class="url-table">
                     <tr>
                         <td class="url-num"></td>
+                        <td class="url-review"></td>
                         <td class="url-name"></td>
                         <td class="url-delete"></td>
                     </tr>
@@ -349,7 +354,6 @@
         </div>
     </div>
 @endsection
-{{--'<img src="{{asset('uploads/images/'.$image->image_name)}}" class="kv-preview-data file-preview-image" style="height:160px"',--}}
 @section('scripts')
     <script src="{{elixir('js/landing-create.js')}}"></script>
     <script>
@@ -520,8 +524,9 @@
                         $.each(data, function (key, value) {
                             var url = 'landingUrlField\/' + value.lan_url;
                             $('.url-table-copy tr .url-num').text(key + 1);
-                            $('.url-table-copy tr .url-name').html('<a data-url-name="' + value.lan_url + '" class="open-landing">landing/' + value.lan_url + '</a>');
-                            $('.url-table-copy tr .url-delete').html('<a>삭제</a>');
+                            $('.url-table-copy tr .url-review').html('<a data-url-name="' + value.lan_url + '" class="open-landing">landing/' + value.lan_url + '</a>');
+                            $('.url-table-copy tr .url-name').text('{{route('landingUrlField.index')}}' + '/' + value.lan_url);
+                            $('.url-table-copy tr .url-delete').html('<a class="btn btn-default">삭제</a>');
 
                             var getForm = $('.url-table-copy .url-table tr');
                             var copyForm = getForm.clone(true);
@@ -536,31 +541,12 @@
             }
 
             function open_landing() {
-                $(".url-name .open-landing").click(function (e) {
+                $(".url-review .open-landing").click(function (e) {
                     e.preventDefault();
                     var url = $(this).attr('data-url-name');
                     window.open("/landingUrlField/" + url, "", "width = 450, height = 650, top = 0, left = 0, menubar=no, status=no, toolbar=no")
                 })
             }
-
-            /*function url_check_ajax() {
-             var formData = {
-             lan_url: $('[name="lan-url"]').val()
-             };
-
-             $.ajax({
-             type: 'get',
-             url: '{{route('landingUrlField.check')}}',
-             data: formData,
-             dataType: 'json',
-             success: function (data) {
-             console.log(data)
-             },
-             error: function (data) {
-             console.log(data)
-             }
-             });
-             }*/
 
             function url_reg_ajax() {
                 var formData = {

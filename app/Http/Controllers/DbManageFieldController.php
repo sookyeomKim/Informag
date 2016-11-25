@@ -31,12 +31,15 @@ class DbManageFieldController extends Controller
             Input::merge(array('db_end_date' => $request->db_end_date . ' 23:59:59'));
             $db_list = $lan_info->db_manage_fields()->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])
                 ->where('db_content->' . $request->db_title_select, '=', $request->db_search_text)->orderBy('id', 'desc')->paginate(20);
+
         } elseif ($request->db_start_date && !$request->db_search_text) {
             Input::merge(array('db_start_date' => $request->db_start_date . ' 00:00:00'));
             Input::merge(array('db_end_date' => $request->db_end_date . ' 23:59:59'));
             $db_list = $lan_info->db_manage_fields()->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])->orderBy('id', 'desc')->paginate(20);
+
         } else {
             $db_list = $lan_info->db_manage_fields()->orderBy('id', 'desc')->paginate(20);
+
         }
 
         $db_info = $lan_info->db_fields;
@@ -61,6 +64,7 @@ class DbManageFieldController extends Controller
         }
 
         //http://stackoverflow.com/questions/15167439/associative-array-change-position
+
         $resArray = array();
         foreach ($db_list as $value) {
             $created_at = $value->created_at->format('Y-m-d H:i:s');
@@ -73,6 +77,11 @@ class DbManageFieldController extends Controller
         }
         Excel::create('Export Data', function ($excel) use ($resArray) {
             $excel->sheet('Sheet 1', function ($sheet) use ($resArray) {
+                $sheet->setWidth(array(
+                    'A' => 5,
+                    'B' => 20,
+                    'C' => 20
+                ));
                 $sheet->fromArray($resArray);
             });
         })->export('xls');

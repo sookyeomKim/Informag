@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('pageTitle') - Infomag</title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{elixir('css/main.css')}}">
@@ -235,79 +235,6 @@
         .static-section .clause-wrap div {
             padding: 5px 0;
         }
-
-        .table-responsive th, td {
-            text-align: center;
-        }
-
-        /*page*/
-        h2 {
-            font-size: 25px;
-            font-weight: bold;
-            margin-top: 30px;
-        }
-
-        h3 {
-            font-size: 18px;
-            margin-top: 29px;
-        }
-
-        /*                    main                  */
-        /*Login*/
-        #Login-container {
-            padding: 10px;
-            margin: 15% 20px;
-            border-top: 2px solid #808080;
-            border-bottom: 2px solid #808080;
-        }
-
-        #Login-box {
-            width: 21%;
-            height: 40%;
-            margin: 0 auto;
-            padding: 15px;
-        }
-
-        #Login-box h1 {
-            margin-top: -3px;
-        }
-
-        #Login-box span {
-            font-weight: 900;
-            font-size: 16px;
-        }
-
-        #Login-box .form-group {
-            margin: 5px 7px;
-            display: block;
-        }
-
-        .login-id {
-            display: inline-block;
-            margin-left: 16px;
-        }
-
-        #Login-box button {
-            width: 75px;
-            height: 75px;
-            color: #cc6600;
-            font-size: 15px;
-            background-color: black;
-            text-align: center;
-            border-radius: 5px;
-            position: relative;
-            top: -80px;
-            left: 279px;
-        }
-
-        .test p {
-            float: left;
-        }
-
-        .test span {
-            float: right;
-        }
-
     </style>
 @yield('styles')
 <!-- Scripts -->
@@ -356,10 +283,12 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">                    &nbsp;
                     @if(!Auth::guest())
-                        <li><a class="active" href="{{route('landing.index')}}">랜딩페이지 관리</a></li>
-                        @if(Auth::user()->hasRole(['Administrator']))
+                        <li><a href="{{route('landing.index')}}">랜딩페이지 관리</a></li>
+                        @if(Auth::user()->hasRole(['Manager']) ||Auth::user()->hasRole(['Administrator']))
                             <li><a class="" href="{{route('client.index')}}">고객 관리</a></li>
-                            <li><a href="#">Admin 관리</a></li>
+                            @if(Auth::user()->hasRole(['Administrator']))
+                                <li><a href="{{route('admin.index')}}">Admin 관리</a></li>
+                            @endif
                         @endif
                         <li><a href="{{route('profile')}}">계정 정보 관리</a></li>
                     @endif
