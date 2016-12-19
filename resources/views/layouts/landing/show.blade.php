@@ -47,7 +47,7 @@
         <img src="{{asset('uploads/images/'.$image->image_name)}}" alt="{{$image->image_name}}" class="img-responsive">
     @endforeach
     <div class="db-button-wrap text-center">
-        @foreach($landing->db_fields as $key =>$db_field)
+        @foreach($dbTitleArray as $key =>$db_field)
             @if($db_field->lan_db_types =='form' && $key == 0)
                 <button id="db-request-button" class="btn btn-primary">신청하기</button>
             @elseif($db_field->lan_db_types =='phone')
@@ -67,12 +67,12 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" role="form">
-                    @foreach($landing->db_fields as $key =>$db_field)
+                    @foreach($dbTitleArray as $key =>$db_field)
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
                                    for="inputEmail3">{{$db_field->lan_db_title}}</label>
                             <div class="col-sm-10">
-                                <input type="email" id="{{$key}}" class="form-control db-input"
+                                <input type="text" id="{{$key}}" class="form-control db-input"
                                        data-db-title="{{$db_field->lan_db_title}}"
                                        placeholder="{{$db_field->lan_db_title}}"/>
                             </div>
@@ -113,13 +113,14 @@
             window.location.href = '/warning';
         }
 
+        hits();
+
         function landing_script() {
             var page_script_text = $('#lan-page-script').val();
             var db_script_text = $('#lan-db-script').val();
             if (page_script_text !== '') {
                 $("head").append(page_script_text);
             }
-            hits();
 
             $('#db-request-button').click(function () {
                 $("#db-reg-modal").modal();
@@ -133,25 +134,64 @@
                 db_reg_ajax();
             });
 
-            function hits() {
-                $.ajax({
-                    type: 'get',
-                    url: '{{route('landingUrlField.hits',$url_info->id)}}'
-                });
-            }
-
             function db_reg_ajax() {
-                var dbCheck = true;
-                $('.db-input').each(function () {
+                var dbObj = {};
+                var formData = {};
+                var validationCheck = true;
+                var emptyCheck = true;
+                var unameRegExp = new RegExp(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/, 'gi');
+                var phoneRegExp = new RegExp(/^[\d]{10,11}$/);
+                var ageRegExp = new RegExp('^[0-9]+$');
+                var emailRegExp = new RegExp(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/, 'i');
+
+                $('.db-input').each(function (key, value) {
                     if ($(this).val() === '') {
-                        alert("모든 내용을 입력해주세요.");
-                        dbCheck = false;
+                        emptyCheck = false;
+                    }
+
+                    if ($(this).attr('data-db-title') === '이름') {
+                        if (unameRegExp.test($(this).val())) {
+                            validationCheck = false;
+                            alert("이름을 다시 입력해주세요.");
+                            $(this).focus();
+                        }
+                    }
+
+                    if ($(this).attr('data-db-title') === '나이') {
+                        if (!ageRegExp.test($(this).val())) {
+                            validationCheck = false;
+                            alert("나이를 다시 입력해주세요.");
+                            $(this).focus();
+                        }
+                    }
+
+                    if ($(this).attr('data-db-title') === '연락처' || $(this).attr('data-db-title') === '전화번호') {
+                        if (phoneRegExp.test($(this).val())) {
+                            validationCheck = false;
+                            alert("번호를 다시 입력해주세요.");
+                            $(this).focus();
+                        }
+                    }
+
+                    if ($(this).attr('data-db-title') === '이메일') {
+                        if (emailRegExp.test($(this).val())) {
+                            validationCheck = false;
+                            alert("이메일을 다시 입력해주세요.");
+                            $(this).focus();
+                        }
                     }
                 });
 
-                if (dbCheck) {
-                    var dbObj = {};
-                    var formData = {};
+                if (!validationCheck) {
+                    return false;
+                }
+
+                if (!emptyCheck) {
+                    alert("모든 내용을 입력해주세요.");
+                    return false;
+                }
+
+                if (validationCheck) {
                     $(".db-input").each(function (index) {
                         dbObj[$(this).attr('data-db-title')] = $(this).val();
                     });
@@ -181,8 +221,17 @@
                             alert('일시적인 오류로 신청이 안 되었습니다.');
                         }
                     })
+                } else {
+                    alert("모두 입력해주세요.")
                 }
             }
+        }
+
+        function hits() {
+            $.ajax({
+                type: 'get',
+                url: '{{route('landingUrlField.hits',$url_info->id)}}'
+            });
         }
     });
 </script>

@@ -12,15 +12,36 @@ use App\User;
 
 class LandingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $roleCheck = \Auth::user()->hasRole(['Administrator','Manager']);
+        $roleCheck = \Auth::user()->hasRole(['Administrator', 'Manager']);
         $userCheck = \Auth::user()->hasRole(['User']);
 
-        if ($userCheck) {
-            $landings = Landing::where('client_id', '=', \Auth::user()->id)->paginate(20);
+        if ($request->db_search_text) {
+            Input::merge(array('db_start_date' => $request->db_start_date . ' 00:00:00'));
+            Input::merge(array('db_end_date' => $request->db_end_date . ' 23:59:59'));
+
+            if ($userCheck) {
+                $landings = Landing::where('client_id', '=', \Auth::user()->id)->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])
+                    ->where('lan_c_name', '=', $request->db_search_text)->orderBy('id', 'desc')->paginate(20);
+            } else {
+                $landings = Landing::whereBetween('created_at', [$request->db_start_date, $request->db_end_date])
+                    ->where('lan_c_name', '=', $request->db_search_text)->orderBy('id', 'desc')->paginate(20);
+            }
+        } elseif ($request->db_start_date && !$request->db_search_text) {
+            Input::merge(array('db_start_date' => $request->db_start_date . ' 00:00:00'));
+            Input::merge(array('db_end_date' => $request->db_end_date . ' 23:59:59'));
+            if ($userCheck) {
+                $landings = Landing::where('client_id', '=', \Auth::user()->id)->whereBetween('created_at', [$request->db_start_date, $request->db_end_date])->orderBy('id', 'desc')->paginate(20);
+            } else {
+                $landings = Landing::whereBetween('created_at', [$request->db_start_date, $request->db_end_date])->orderBy('id', 'desc')->paginate(20);
+            }
         } else {
-            $landings = Landing::paginate(20);
+            if ($userCheck) {
+                $landings = Landing::where('client_id', '=', \Auth::user()->id)->orderBy('id', 'desc')->paginate(20);
+            } else {
+                $landings = Landing::orderBy('id', 'desc')->paginate(20);
+            }
         }
 
         return view('layouts.landing.index', compact('landings', 'roleCheck'));
@@ -28,7 +49,7 @@ class LandingController extends Controller
 
     public function edit($id, Request $request)
     {
-        $landing = Landing::find($id);
+        $landing = Landing::findOrFail($id);
 
         if ($request->client_value_text) {
             $clients = User::whereRaw('role_id = ?', 5)->where($request->client_column_select, '=', $request->client_value_text)->orderBy('id', 'desc')->paginate(10);

@@ -1,4 +1,4 @@
-@extends('layouts.marster')
+@extends('layouts.master')
 @section('pageTitle', 'DbList')
 @section('styles')
     <link rel="stylesheet" href="{{elixir('css/db-show.css')}}">

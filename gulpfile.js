@@ -44,6 +44,9 @@ elixir(mix => {
     //compiled landing-create.css
     mix.styles(['vendor/bootstrap-datepicker.css', 'vendor/bootstrap-fileinput.css'], 'public/css/landing-create.css', 'public/css');
 
+    //compiled landing-index.css
+    mix.styles(['vendor/bootstrap-datepicker.css'], 'public/css/landing-index.css', 'public/css');
+
     //compiled db-show.css
     mix.styles(['vendor/bootstrap-datepicker.css'], 'public/css/db-show.css', 'public/css');
 
@@ -53,8 +56,11 @@ elixir(mix => {
     //compiled landing-create.js
     mix.scripts(['vendor/bootstrap-datepicker.js', 'vendor/purify.js', 'vendor/sortable.js', 'vendor/bootstrap-fileinput.js'], 'public/js/landing-create.js', 'public/js');
 
+    //compiled landing-index.js
+    mix.scripts(['vendor/bootstrap-datepicker.js'], 'public/js/landing-index.js', 'public/js');
+
     //compiled db-show.js
     mix.scripts(['vendor/bootstrap-datepicker.js'], 'public/js/db-show.js', 'public/js');
 
-    mix.version(['css/main.css', 'css/landing-create.css', 'css/db-show.css', 'js/main.js', 'js/landing-create.js', 'js/db-show.js']);
+    mix.version(['css/main.css', 'css/landing-create.css', 'css/db-show.css', 'js/main.js', 'js/landing-create.js', 'js/db-show.js', 'css/landing-index.css', 'js/landing-index.js']);
 });

@@ -1,4 +1,4 @@
-@extends('layouts.marster')
+@extends('layouts.master')
 @section('pageTitle', 'LandingReg')
 @section('styles')
     <link rel="stylesheet" href="{{elixir('css/landing-create.css')}}">
@@ -27,10 +27,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="lan_m_name" class="col-sm-1 control-label">제목(관리자)</label>
+                    <label for="lan_m_name" class="col-sm-1 control-label">랜딩명</label>
                     <div class="col-sm-11">
                         <input type="text" class="form-control" id="lan_m_name" name="lan_m_name"
-                               placeholder="제목(관리자)을 입력해주세요.">
+                               placeholder="랜딩명을 입력해주세요.">
                     </div>
                 </div>
                 <div class="form-group input-daterange">
@@ -49,10 +49,10 @@
                 <legend>내용입력</legend>
                 <hr>
                 <div class="form-group">
-                    <label for="lan_title" class="col-sm-1 control-label">제목(유저)</label>
+                    <label for="lan_title" class="col-sm-1 control-label">페이지 타이틀</label>
                     <div class="col-sm-11">
                         <input type="text" class="form-control" id="lan_title" name="lan_title"
-                               placeholder="유저명을 입력해주세요.">
+                               placeholder="페이지 타이틀을 입력해주세요.">
                     </div>
                 </div>
                 <div class="form-group">

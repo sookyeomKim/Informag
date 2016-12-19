@@ -1,4 +1,4 @@
-@extends('layouts.marster')
+@extends('layouts.master')
 @section('pageTitle', 'LandingEdit')
 @section('styles')
     <link rel="stylesheet" href="{{elixir('css/landing-create.css')}}">
@@ -31,10 +31,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="lan_m_name" class="col-sm-1 control-label">제목(관리자)</label>
+                    <label for="lan_m_name" class="col-sm-1 control-label">랜딩명</label>
                     <div class="col-sm-11">
                         <input type="text" class="form-control" id="lan_m_name" name="lan_m_name"
-                               placeholder="제목(관리자)을 입력해주세요." value="{{$landing->lan_m_name}}">
+                               placeholder="랜딩명을 입력해주세요." value="{{$landing->lan_m_name}}">
                     </div>
                 </div>
                 <div class="form-group input-daterange">
@@ -55,10 +55,10 @@
                 <legend>내용입력</legend>
                 <hr>
                 <div class="form-group">
-                    <label for="lan_title" class="col-sm-1 control-label">제목(유저)</label>
+                    <label for="lan_title" class="col-sm-1 control-label">페이지 타이틀</label>
                     <div class="col-sm-11">
                         <input type="text" class="form-control" id="lan_title" name="lan_title"
-                               placeholder="유저명을 입력해주세요." value="{{$landing->lan_title}}">
+                               placeholder="페이지 타이틀을 입력해주세요." value="{{$landing->lan_title}}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -219,7 +219,7 @@
                         <div class="col-sm-10">
                             <select id="lan-db-types" class="form-control">
                                 <option value="1">DB입력창</option>
-                                <option value="2">전화번호</option>
+                                <option value="2">전화걸기</option>
                             </select>
                         </div>
                     </div>
@@ -230,7 +230,7 @@
                         </div>
                     </div>
                     <div class="phone-input-wrap">
-                        <label for="lan-db-phone" class="col-sm-2 control-label">전화번호</label>
+                        <label for="lan-db-phone" class="col-sm-2 control-label">전화걸기</label>
                         <div class="col-sm-10">
                             <input type="text" id="lan-db-phone" name="lan-db-title" class="form-control">
                         </div>
@@ -393,7 +393,7 @@
                 },
                 initialPreview: [
                     @foreach($landing->images as $image)
-                            "{{asset('uploads/images/'.$image->image_name)}}",
+                        "{{asset('uploads/images/'.$image->image_name)}}",
                     @endforeach
                 ],
                 initialPreviewAsData: true,
@@ -435,7 +435,7 @@
                 }
                 currentVal = newVal;
                 db_input_trigger();
-            })
+            });
 
             $("#db-add-button").click(function () {
                 db_reg_ajax();
@@ -587,7 +587,7 @@
                         $(".phone-input-wrap").css({
                             'display': 'block'
                         });
-                        $(".db-name-title").text('전화번호');
+                        $(".db-name-title").text('전화걸기');
                     }
                 });
             }
@@ -657,7 +657,11 @@
                     dataType: 'json',
                     success: function (data) {
                         $('[name="lan-db-title"]').val('');
-                        db_index_ajax();
+                        if(data==='이미 등록된 DB명입니다.'){
+                            alert('이미 등록된 DB명입니다.');
+                        }else{
+                            /*db_index_ajax();*/
+                        }
                     },
                     error: function (data) {
                         console.log();
@@ -754,6 +758,21 @@
                 });
             }
         })(jQuery);
+    </script>
+
+
+
+    <script !src="">
+        $(".pubListTable tbody tr").click(function () {
+            console.log($(this).find("input").is(":checked"));
+            if ($(this).find("input").is(":checked") == false) {
+                console.log("체크");
+                $(this).find("input").attr("checked", "checked");
+            } else {
+                console.log("체크해제");
+                $(this).find("input").removeAttr("checked");
+            }
+        });
     </script>
 @endsection
 {{--

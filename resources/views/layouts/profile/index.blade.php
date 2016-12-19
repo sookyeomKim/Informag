@@ -1,4 +1,4 @@
-@extends('layouts.marster')
+@extends('layouts.master')
 @section('content')
     <div class="col-sm-offset-4 col-sm-4">
         <form id="clientRegForm" class="form-horizontal" role="form">

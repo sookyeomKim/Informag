@@ -75,6 +75,7 @@ class DbManageFieldController extends Controller
             }
             array_push($resArray, $arry);
         }
+
         Excel::create('Export Data', function ($excel) use ($resArray) {
             $excel->sheet('Sheet 1', function ($sheet) use ($resArray) {
                 $sheet->setWidth(array(

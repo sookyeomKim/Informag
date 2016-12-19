@@ -8,8 +8,8 @@ class LandingDbField extends Model
 {
     protected $fillable = ['lan_db_title', 'lan_db_types', 'lan_id'];
 
-    public function landing()
+    public function db_rel_fields()
     {
-        return $this->belongsTo('App\Landing', 'lan_id');
+        return $this->hasMany('App\DbRelField', 'lan_id');
     }
 }

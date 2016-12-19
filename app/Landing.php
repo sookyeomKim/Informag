@@ -18,9 +18,14 @@ class Landing extends Model
         return $this->hasMany('App\Image','lan_id');
     }
 
-    public function db_fields()
+    /*public function db_fields()
     {
         return $this->hasMany('App\LandingDbField', 'lan_id');
+    }*/
+
+    public function db_rel_fields()
+    {
+        return $this->hasMany('App\DbRelField', 'lan_id');
     }
 
     public function db_manage_fields()

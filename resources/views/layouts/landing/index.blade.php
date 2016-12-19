@@ -1,6 +1,7 @@
-@extends('layouts.marster')
+@extends('layouts.master')
 @section('pageTitle', 'LandingList')
 @section('styles')
+    <link rel="stylesheet" href="{{elixir('css/landing-index.css')}}">
     <style>
         .search-box {
             margin: 0 auto;
@@ -19,9 +20,40 @@
     </aside>
     <section class="col-md-10">
         <h2>랜딩 페이지 목록</h2>
-        <p>수정하려면 제목을, 수집된 DB를 확인하려면 DB수 항목을 클릭하세요 <span class="badge text-right">총 221개</span></p>
-        <!-- 검색 -->
-        <nav class="navbar navbar-default">
+        <form id="search-form" class="form-horizontal" method="get"
+              action="{{route('landing.index')}}">
+            {{ csrf_field() }}
+            <div class="form-group">
+                <div class="input-daterange">
+                    <div class="col-sm-2">
+                        {{--http://link2me.tistory.com/755--}}
+                        <input type="text" class="form-control" id="db-start-date" name="db_start_date" readonly=""
+                               value="{{date("Y-m-d")}}">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" id="db-end-date" name="db_end_date" readonly=""
+                               value="{{date("Y-m-d",mktime(0,0,0,date("m")+6,date("d"),date("Y")))}}">
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <select class="form-control" id="db-title-select" name="db_title_select">
+                        <option value="업체명">업체명</option>
+                        <option value="담장자">담장자</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="db-search-text" name="db_search_text"
+                           value="">
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-default">검색</button>
+                </div>
+            </div>
+        </form>
+
+    {{--<p>수정하려면 제목을, 수집된 DB를 확인하려면 DB수 항목을 클릭하세요 <span class="badge text-right">총 221개</span></p>--}}
+    <!-- 검색 -->
+        {{--<nav class="navbar navbar-default">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -57,7 +89,7 @@
                     </form>
                 </div>
             </div><!-- /.navbar-collapse -->
-        </nav>
+        </nav>--}}
 
         <div class="tablebox">
             <div class="table-responsive">
@@ -81,11 +113,11 @@
                             <td>{{$landing->created_at}}</td>
                             <td>{{$landing->lan_c_name}}</td>
                             @if($roleCheck)
-                                <td><a href="{{route('landing.edit',$landing->id)}}">{{$landing->lan_title}}</a>
+                                <td><a href="{{route('landing.edit',$landing->id)}}">{{$landing->lan_m_name}}</a>
                                 </td>
                             @else
                                 <td>
-                                    <a href="{{route('DbManageField.show',$landing->id)}}">{{$landing->lan_title}}</a>
+                                    <a href="{{route('DbManageField.show',$landing->id)}}">{{$landing->lan_m_name}}</a>
                                 </td>
                             @endif
                             <td>{{$landing->user->m_name}}</td>
@@ -119,4 +151,17 @@
             </div>
         </div>
     </section>
+@endsection
+@section('scripts')
+    <script src="{{elixir('js/landing-index.js')}}"></script>
+    <script>
+        (function ($) {
+            $('.input-daterange').datepicker({
+                todayBtn: "linked",
+                language: "ko",
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+        })(jQuery);
+    </script>
 @endsection

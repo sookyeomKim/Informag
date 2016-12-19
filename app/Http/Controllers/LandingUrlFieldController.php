@@ -20,8 +20,14 @@ class LandingUrlFieldController extends Controller
     {
         $url_info = LandingUrlField::whereRaw('lan_url = ?', $name)->get()[0];
         $landing = $url_info->landing;
+        $dbTitleArray = [];
+        $landing = Landing::findOrFail($landing->id);
+        $dbRelFields = $landing->db_rel_fields;
+        foreach ($dbRelFields as $item) {
+            array_push($dbTitleArray, $item->db_field);
+        }
 
-        return view('layouts.landing.show', compact(['url_info', 'landing']));
+        return view('layouts.landing.show', compact(['url_info', 'landing', 'dbTitleArray']));
     }
 
     public function store(Request $request)

@@ -1,4 +1,4 @@
-@extends('layouts.marster')
+@extends('layouts.master')
 @section('pageTitle', 'AdminList')
 @section('content')
     <aside class="col-md-2 static-aside">
