@@ -131,14 +131,10 @@
             });
 
             $("#db-submit-button").click(function () {
-                db_reg_ajax();
-            });
-
-            function db_reg_ajax() {
-                var dbObj = {};
-                var formData = {};
+                $(this).attr('disabled', true);
                 var validationCheck = true;
                 var emptyCheck = true;
+                var doneTheStuff;
                 var unameRegExp = new RegExp(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/, 'gi');
                 var phoneRegExp = new RegExp(/^[\d]{10,11}$/);
                 var ageRegExp = new RegExp('^[0-9]+$');
@@ -148,7 +144,15 @@
                     if ($(this).val() === '') {
                         emptyCheck = false;
                     }
+                });
 
+                if (!emptyCheck) {
+                    $(this).removeAttr('disabled');
+                    alert("모든 내용을 입력해주세요.");
+                    return false;
+                }
+
+                $('.db-input').each(function (key, value) {
                     if ($(this).attr('data-db-title') === '이름') {
                         if (unameRegExp.test($(this).val())) {
                             validationCheck = false;
@@ -166,7 +170,7 @@
                     }
 
                     if ($(this).attr('data-db-title') === '연락처' || $(this).attr('data-db-title') === '전화번호') {
-                        if (phoneRegExp.test($(this).val())) {
+                        if (!phoneRegExp.test($(this).val())) {
                             validationCheck = false;
                             alert("번호를 다시 입력해주세요.");
                             $(this).focus();
@@ -183,47 +187,51 @@
                 });
 
                 if (!validationCheck) {
-                    return false;
-                }
-
-                if (!emptyCheck) {
-                    alert("모든 내용을 입력해주세요.");
+                    $(this).removeAttr('disabled');
                     return false;
                 }
 
                 if (validationCheck) {
-                    $(".db-input").each(function (index) {
-                        dbObj[$(this).attr('data-db-title')] = $(this).val();
-                    });
-
-                    formData = {
-                        lan_id:{{$url_info->lan_id}},
-                        db_content: dbObj,
-                        db_inflow: '{{$url_info->lan_url}}'
-                    };
-
-                    $.ajax({
-                        type: 'post',
-                        url: '{{route('DbManageField.store')}}',
-                        data: formData,
-                        dataType: 'json',
-                        success: function (data) {
-                            $('<iframe id="db_script_iframe"/>').appendTo('body');
-                            alert('신청이 완료되었습니다.');
-                            $('#db_script_iframe').contents().find('head').append(db_script_text);
-                            $('#db_script_iframe').attr('src', $('#db_script_iframe').attr('src'));
-                            $("#db-reg-modal").modal('hide');
-                            $('.db-input').each(function () {
-                                $(this).val('');
-                            });
-                        },
-                        error: function (data) {
-                            alert('일시적인 오류로 신청이 안 되었습니다.');
-                        }
-                    })
+                    db_reg_ajax(this);
                 } else {
                     alert("모두 입력해주세요.")
                 }
+            });
+
+            function db_reg_ajax(thisEl) {
+                var dbObj = {};
+                var formData = {};
+
+                $(".db-input").each(function (index) {
+                    dbObj[$(this).attr('data-db-title')] = $(this).val();
+                });
+
+                formData = {
+                    lan_id:{{$url_info->lan_id}},
+                    db_content: dbObj,
+                    db_inflow: '{{$url_info->lan_url}}'
+                };
+
+                $.ajax({
+                    type: 'post',
+                    url: '{{route('DbManageField.store')}}',
+                    data: formData,
+                    dataType: 'json',
+                    success: function (data) {
+                        alert('신청이 완료되었습니다.');
+                        $(thisEl).removeAttr('disabled');
+                        $('<iframe id="db_script_iframe"/>').appendTo('body');
+                        $('#db_script_iframe').contents().find('head').append(db_script_text);
+                        $('#db_script_iframe').attr('src', $('#db_script_iframe').attr('src'));
+                        $("#db-reg-modal").modal('hide');
+                        $('.db-input').each(function () {
+                            $(this).val('');
+                        });
+                    },
+                    error: function (data) {
+                        alert('일시적인 오류로 신청이 안 되었습니다.');
+                    }
+                });
             }
         }
 

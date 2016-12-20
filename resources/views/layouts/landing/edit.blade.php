@@ -660,7 +660,7 @@
                         if(data==='이미 등록된 DB명입니다.'){
                             alert('이미 등록된 DB명입니다.');
                         }else{
-                            /*db_index_ajax();*/
+                            db_index_ajax();
                         }
                     },
                     error: function (data) {
