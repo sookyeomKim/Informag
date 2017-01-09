@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{elixir('css/main.css')}}">
     <style>
+
         .login-wrap {
             margin: 300px 0;
             border-top: 2px solid #000;

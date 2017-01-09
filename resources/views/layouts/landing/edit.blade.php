@@ -220,6 +220,7 @@
                             <select id="lan-db-types" class="form-control">
                                 <option value="1">DB입력창</option>
                                 <option value="2">전화걸기</option>
+                                <option value="3">URL</option>
                             </select>
                         </div>
                     </div>
@@ -233,6 +234,12 @@
                         <label for="lan-db-phone" class="col-sm-2 control-label">전화걸기</label>
                         <div class="col-sm-10">
                             <input type="text" id="lan-db-phone" name="lan-db-title" class="form-control">
+                        </div>
+                    </div>
+                    <div class="url-input-wrap">
+                        <label for="lan-db-url" class="col-sm-2 control-label">URL</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="lan-db-url" name="lan-db-title" class="form-control">
                         </div>
                     </div>
                     <div class="col-sm-12 text-right">
@@ -579,15 +586,32 @@
                         $(".phone-input-wrap").css({
                             'display': 'none'
                         });
+                        $(".url-input-wrap").css({
+                            'display': 'none'
+                        });
                         $(".db-name-title").text('DB필드명');
-                    } else {
+                    } else if ($(this).val() === '2') {
                         $(".form-input-wrap").css({
                             'display': 'none'
                         });
                         $(".phone-input-wrap").css({
                             'display': 'block'
                         });
+                        $(".url-input-wrap").css({
+                            'display': 'none'
+                        });
                         $(".db-name-title").text('전화걸기');
+                    } else {
+                        $(".form-input-wrap").css({
+                            'display': 'none'
+                        });
+                        $(".phone-input-wrap").css({
+                            'display': 'none'
+                        });
+                        $(".url-input-wrap").css({
+                            'display': 'block'
+                        });
+                        $(".db-name-title").text('URL');
                     }
                 });
             }
@@ -634,14 +658,21 @@
 
             function db_reg_ajax() {
                 var field_name;
-                if ($('#lan-db-types option:selected').val() === '1') {
+                var selectedVal = $('#lan-db-types option:selected').val();
+                if (selectedVal === '1') {
                     field_name = $('#lan-db-title').val();
-                } else {
+                } else if (selectedVal === '2') {
                     if ($('#db-field-table').find('.db-name').length > 0) {
                         alert('전화번호는 한번만 입력할 수 있습니다.');
                         return;
                     }
                     field_name = $('#lan-db-phone').val();
+                } else {
+                    if ($('#db-field-table').find('.db-name').length > 0) {
+                        alert('URL 한번만 입력할 수 있습니다.');
+                        return;
+                    }
+                    field_name = $('#lan-db-url').val();
                 }
 
                 var formData = {
@@ -657,9 +688,9 @@
                     dataType: 'json',
                     success: function (data) {
                         $('[name="lan-db-title"]').val('');
-                        if(data==='이미 등록된 DB명입니다.'){
+                        if (data === '이미 등록된 DB명입니다.') {
                             alert('이미 등록된 DB명입니다.');
-                        }else{
+                        } else {
                             db_index_ajax();
                         }
                     },

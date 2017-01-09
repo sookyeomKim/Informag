@@ -52,6 +52,8 @@
                 <button id="db-request-button" class="btn btn-primary">신청하기</button>
             @elseif($db_field->lan_db_types =='phone')
                 <a href="tel:{{FormatPhoneHelper($db_field->lan_db_title)}}" class="btn btn-primary">전화걸기</a>
+            @elseif($db_field->lan_db_types =='url')
+                <a href="{{$db_field->lan_db_title}}" class="btn btn-primary">링크이동</a>
             @endif
         @endforeach
     </div>
@@ -106,14 +108,14 @@
 <script src="{{elixir('js/main.js')}}"></script>
 <script>
     $(function () {
+        hits();
+
         var lan_mobile_confirm = $('#lan_mobile_confirm').val();
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || lan_mobile_confirm === '0') {
             landing_script();
         } else {
             window.location.href = '/warning';
         }
-
-        hits();
 
         function landing_script() {
             var page_script_text = $('#lan-page-script').val();
@@ -134,7 +136,6 @@
                 $(this).attr('disabled', true);
                 var validationCheck = true;
                 var emptyCheck = true;
-                var doneTheStuff;
                 var unameRegExp = new RegExp(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/, 'gi');
                 var phoneRegExp = new RegExp(/^[\d]{10,11}$/);
                 var ageRegExp = new RegExp('^[0-9]+$');
