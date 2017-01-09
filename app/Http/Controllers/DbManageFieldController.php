@@ -9,11 +9,28 @@ use App\Landing;
 use App\DbManageField;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
+use App\WebDataTempMkt;
 
 class DbManageFieldController extends Controller
 {
     public function store(Request $request)
     {
+        $requestVal = $request->all();
+        if ($requestVal['lan_id'] == 4) {
+            $comas = new WebDataTempMkt();
+            $comas->MKT_Code = '1005';
+            $comas->MKT_Date = '';
+            $comas->Tel_No = $requestVal['db_content']['연락처'];
+            $comas->Tel_Name = $requestVal['db_content']['이름'];
+            $comas->Tel_Type = '';
+            $comas->Tel_Etc1 = $requestVal['db_content']['상담내용'];
+            $comas->Tel_Etc2 = '';
+            $comas->Tel_Etc3 = '';
+            $comas->Tel_Etc4 = '';
+            $comas->Tel_Etc5 = '';
+            $comas->Insert_Date = date('Y-m-d H:i:s', time());
+            $comas->save();
+        }
         $task = DbManageField::create($request->all());
         return \Response::json($task);
     }
@@ -42,7 +59,12 @@ class DbManageFieldController extends Controller
 
         }
 
-        $db_info = $lan_info->db_fields;
+        $dbArray = [];
+        $dbRelFields = $lan_info->db_rel_fields;
+        foreach ($dbRelFields as $item) {
+            array_push($dbArray, $item->db_field);
+        }
+        $db_info = $dbArray;
         return view('layouts.landing.db_show', compact('dmf_info', 'lan_info', 'url_info', 'db_list', 'db_info', 'roleCheck'));
     }
 
@@ -75,11 +97,10 @@ class DbManageFieldController extends Controller
             }
             array_push($resArray, $arry);
         }
-
         Excel::create('Export Data', function ($excel) use ($resArray) {
             $excel->sheet('Sheet 1', function ($sheet) use ($resArray) {
                 $sheet->setWidth(array(
-                    'A' => 5,
+                    'A' => 20,
                     'B' => 20,
                     'C' => 20
                 ));
