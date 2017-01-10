@@ -18,6 +18,12 @@ class LandingUrlFieldController extends Controller
 
     public function view($name)
     {
+        $name = preg_split('/-/', $name, -1, PREG_SPLIT_NO_EMPTY);
+
+        if ($name[0] == 'olgabebe') {
+            return view('layouts.otherLanding.' . $name[0]);
+        }
+
         $url_info = LandingUrlField::whereRaw('lan_url = ?', $name)->get()[0];
         $landing = $url_info->landing;
         $dbTitleArray = [];
