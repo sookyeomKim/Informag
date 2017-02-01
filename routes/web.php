@@ -11,6 +11,7 @@ Route::get('warning', function () {
 
 Route::get('landingUrlField/{url_name}', ['as' => 'landingUrlField.view', 'uses' => 'LandingUrlFieldController@view']);
 Route::post('dbRegister', ['as' => 'DbManageField.store', 'uses' => 'DbManageFieldController@store']);
+Route::put('landingUrlField/{id}/hits', ['as' => 'landingUrlField.hits', 'uses' => 'LandingUrlFieldController@hits']);
 
 Route::group(['middleware' => ['auth', 'roles'], 'roles' => ['administrator']], function () {
     Route::group(['prefix' => 'admin'], function () {
@@ -45,7 +46,6 @@ Route::group(['middleware' => ['auth', 'roles'], 'roles' => ['administrator']], 
 
         Route::group(['prefix' => 'landingUrlField'], function () {
             Route::get('check', ['as' => 'landingUrlField.check', 'uses' => 'LandingUrlFieldController@check']);
-            Route::get('{id}/hits', ['as' => 'landingUrlField.hits', 'uses' => 'LandingUrlFieldController@hits']);
             Route::post('', ['as' => 'landingUrlField.store', 'uses' => 'LandingUrlFieldController@store']);
             Route::get('', ['as' => 'landingUrlField.index', 'uses' => 'LandingUrlFieldController@index']);
             Route::delete('{id}', ['as' => 'landingUrlField.destroy', 'uses' => 'LandingUrlFieldController@destroy']);

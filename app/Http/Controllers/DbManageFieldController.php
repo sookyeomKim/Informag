@@ -15,24 +15,34 @@ class DbManageFieldController extends Controller
 {
     public function store(Request $request)
     {
-        $requestVal = $request->all();
-        if ($requestVal['lan_id'] == 4) {
-            $comas = new WebDataTempMkt();
-            $comas->MKT_Code = '1005';
-            $comas->MKT_Date = '';
-            $comas->Tel_No = $requestVal['db_content']['연락처'];
-            $comas->Tel_Name = $requestVal['db_content']['이름'];
-            $comas->Tel_Type = '';
-            $comas->Tel_Etc1 = $requestVal['db_content']['상담내용'];
-            $comas->Tel_Etc2 = '';
-            $comas->Tel_Etc3 = '';
-            $comas->Tel_Etc4 = '';
-            $comas->Tel_Etc5 = '';
-            $comas->Insert_Date = date('Y-m-d H:i:s', time());
-            $comas->save();
+        /*코마스 중복 검사*/
+        /*TODO 후에 공용으로 수정하기*/
+        $getDbs = DbManageField::where('lan_id', '=', $request->lan_id)->where('db_content->이름', '=', $request->db_content['이름'])->where('db_content->연락처', '=', $request->db_content['연락처'])->get();
+        $checkArry = count($getDbs) == 0;
+        if ($checkArry) {
+            $requestVal = $request->all();
+            if ($requestVal['lan_id'] == 4) {
+                $comas = new WebDataTempMkt();
+                $comas->MKT_Code = '1005';
+                $comas->MKT_Date = '';
+                $comas->Tel_No = $requestVal['db_content']['연락처'];
+                $comas->Tel_Name = $requestVal['db_content']['이름'];
+                $comas->Tel_Type = '';
+                $comas->Tel_Etc1 = $requestVal['db_content']['상담내용'];
+                $comas->Tel_Etc2 = '';
+                $comas->Tel_Etc3 = '';
+                $comas->Tel_Etc4 = '';
+                $comas->Tel_Etc5 = '';
+                $comas->Insert_Date = date('Y-m-d H:i:s', time());
+                $comas->save();
+            }
+            $task = DbManageField::create($request->all());
+            /*return \Response::json($task);*/
+            /*return \Response::json($requestVal['db_content']['이름']);*/
+            return \Response::json(true);
+        } else {
+            return \Response::json($checkArry);
         }
-        $task = DbManageField::create($request->all());
-        return \Response::json($task);
     }
 
     public function show($id, Request $request)

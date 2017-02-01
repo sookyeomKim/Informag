@@ -33,7 +33,30 @@ class LandingUrlFieldController extends Controller
             array_push($dbTitleArray, $item->db_field);
         }
 
-        return view('layouts.landing.show', compact(['url_info', 'landing', 'dbTitleArray']));
+        $jpgArry = [];
+        $pngArry = [];
+
+        foreach ($landing->images as $image) {
+            $sub1 = preg_split('/_/', $image->image_name, -1, PREG_SPLIT_NO_EMPTY);
+            $syb2 = preg_split('/\./', $sub1[count($sub1) - 1], -1, PREG_SPLIT_NO_EMPTY);
+            if ($syb2[1] == 'jpg') {
+                array_push($jpgArry, $image);
+            } else {
+                array_push($pngArry, $image);
+            }
+        }
+
+        /*커스텀 url버튼일 경우*/
+        $bottom = 0;
+        $url = null;
+        foreach ($dbTitleArray as $db_field) {
+            if ($db_field->lan_db_types == 'url') {
+                $sub1 = preg_split('/_/', $db_field->lan_db_title, -1, PREG_SPLIT_NO_EMPTY);
+                $url = $sub1[0];
+                $bottom = (int)$sub1[1];
+            }
+        }
+        return view('layouts.landing.show', compact(['url_info', 'landing', 'dbTitleArray', 'jpgArry', 'pngArry', 'bottom','url']));
     }
 
     public function store(Request $request)

@@ -20,8 +20,23 @@
             bottom: 0;
         }
 
+        .image-wrap {
+            position: relative;
+        }
+
         .image-wrap img {
-            margin: 0 auto;
+            width: 100%;
+        }
+
+        .image-wrap .button {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            width: 85%;
         }
 
         .db-button-wrap {
@@ -43,20 +58,28 @@
 <body>
 
 <section class="image-wrap">
-    @foreach($landing->images as $image)
-        <img src="{{asset('uploads/images/'.$image->image_name)}}" alt="{{$image->image_name}}" class="img-responsive">
+    @foreach($jpgArry as $image)
+        <img src="{{asset('uploads/images/'.$image->image_name)}}" alt="{{$image->image_name}}" class="main-image">
     @endforeach
-    <div class="db-button-wrap text-center">
-        @foreach($dbTitleArray as $key =>$db_field)
-            @if($db_field->lan_db_types =='form' && $key == 0)
+
+    @foreach($dbTitleArray as $key =>$db_field)
+        @if($db_field->lan_db_types =='form' && $key == 0)
+            <div class="db-button-wrap text-center">
                 <button id="db-request-button" class="btn btn-primary">신청하기</button>
-            @elseif($db_field->lan_db_types =='phone')
+            </div>
+        @elseif($db_field->lan_db_types =='phone')
+            <div class="db-button-wrap text-center">
                 <a href="tel:{{FormatPhoneHelper($db_field->lan_db_title)}}" class="btn btn-primary">전화걸기</a>
-            @elseif($db_field->lan_db_types =='url')
-                <a href="{{$db_field->lan_db_title}}" class="btn btn-primary">링크이동</a>
-            @endif
-        @endforeach
-    </div>
+            </div>
+        @elseif($db_field->lan_db_types =='url')
+            {{--<a href="{{$db_field->lan_db_title}}" class="btn btn-primary">링크이동</a>--}}
+            <a href="{{$url}}" class="button" style="bottom: {{$bottom}}%">
+                @foreach($pngArry as $image)
+                    <img src="{{asset('uploads/images/'.$image->image_name)}}" alt="특가공구 버튼">
+                @endforeach
+            </a>
+        @endif
+    @endforeach
 </section>
 
 <div class="modal fade" id="db-reg-modal" tabindex="-1" role="dialog" aria-labelledby="db-reg-modal-label">
@@ -107,11 +130,13 @@
 </div>
 <script src="{{elixir('js/main.js')}}"></script>
 <script>
-    $(function () {
-        hits();
-
+    (function ($) {
         var lan_mobile_confirm = $('#lan_mobile_confirm').val();
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || lan_mobile_confirm === '0') {
+            $.ajax({
+                type: 'put',
+                url: '{{route('landingUrlField.hits',$url_info->id)}}'
+            });
             landing_script();
         } else {
             window.location.href = '/warning';
@@ -219,15 +244,23 @@
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
-                        alert('신청이 완료되었습니다.');
-                        $(thisEl).removeAttr('disabled');
-                        $('<iframe id="db_script_iframe"/>').appendTo('body');
-                        $('#db_script_iframe').contents().find('head').append(db_script_text);
-                        $('#db_script_iframe').attr('src', $('#db_script_iframe').attr('src'));
-                        $("#db-reg-modal").modal('hide');
-                        $('.db-input').each(function () {
-                            $(this).val('');
-                        });
+                        if (data) {
+                            alert('신청이 완료되었습니다.');
+                            $(thisEl).removeAttr('disabled');
+                            $('<iframe id="db_script_iframe"/>').appendTo('body');
+                            $('#db_script_iframe').contents().find('head').append(db_script_text);
+                            $('#db_script_iframe').attr('src', $('#db_script_iframe').attr('src'));
+                            $("#db-reg-modal").modal('hide');
+                            $('.db-input').each(function () {
+                                $(this).val('');
+                            });
+                        } else {
+                            alert("이미 신청하셨던 분입니다.");
+                            $(thisEl).removeAttr('disabled');
+                            $('.db-input').each(function () {
+                                $(this).val('');
+                            });
+                        }
                     },
                     error: function (data) {
                         alert('일시적인 오류로 신청이 안 되었습니다.');
@@ -235,14 +268,7 @@
                 });
             }
         }
-
-        function hits() {
-            $.ajax({
-                type: 'get',
-                url: '{{route('landingUrlField.hits',$url_info->id)}}'
-            });
-        }
-    });
+    })(jQuery);
 </script>
 </body>
 </html>
